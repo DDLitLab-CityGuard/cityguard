@@ -11,11 +11,19 @@ map.on('moveend', function(ev) {
     fetchandrender();
 });
 
-//fetch data from api
+
+const markerGroup = L.layerGroup().addTo(map);
+
+
 function fetchandrender() {
     fetch('http://127.0.0.1:5123/api/fetchreports')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+
+            markerGroup.clearLayers();
+
+            for (var i = 0; i < data.length; i++) {
+                marker = L.marker([data[i].latitude, data[i].longitude]).addTo(markerGroup);
+            }
         });
 }
