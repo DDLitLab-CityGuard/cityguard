@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Setter
 @Getter
 @Entity
@@ -19,5 +20,8 @@ public class Report {
     private String description;
     private String category;
     private String dateTime;
+    private Boolean heatmap;
 
 }
+
+
