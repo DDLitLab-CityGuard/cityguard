@@ -19,7 +19,7 @@ function fetchandrender() {
     fetch('http://127.0.0.1:5123/api/fetchreports')
         .then(response => response.json())
         .then(data => {
-
+            console.log(data)
             markerGroup.clearLayers();
 
             for (var i = 0; i < data.length; i++) {
