@@ -1,4 +1,4 @@
-package com.example.cityguardserver;
+package com.example.cityguardserver.databasemodels;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,11 +10,10 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class Report {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Float longitude;
-    private Float latitude;
+    private  String name;
 
-}
+  }
