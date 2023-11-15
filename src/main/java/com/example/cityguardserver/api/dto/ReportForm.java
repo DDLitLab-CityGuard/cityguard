@@ -1,15 +1,15 @@
 package com.example.cityguardserver.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.regex.PatternSyntaxException;
 
 import static java.lang.Float.parseFloat;
 
@@ -19,48 +19,37 @@ import static java.lang.Float.parseFloat;
 @Slf4j
 public class ReportForm {
 
-    private List<Float> coordinates;
-    private Calendar calendar;
+    private float latitude;
+    private float longitude;
+
+    @JsonProperty("date")
+    private LocalDate reportedDate; //ISO 8601
+
+    @JsonProperty("time")
+    private LocalTime reportedTime; //ISO 8601
+
+    @JsonProperty("desc")
+    @Size(max = 255)
     private String description;
+
+    @JsonProperty("currentDatetime")
+    private Boolean useCurrentDateTime = false;
+
+    @JsonProperty("currentLocation")
+    private Boolean useCurrentLocation = false;
+
+    @JsonProperty("category")
+    @NotNull
     private String category;
-
-    public ReportForm(String location,String date,String time,String desc,String currentDateTime, String currentLocation,String category){
-        System.out.println(currentDateTime);
-        System.out.println(currentLocation);
-        this.coordinates=splitcoordinates(location);
-        setDateandTime(date,time);
-        this.description=desc;
-        this.category=category;
-    }
-
-
-
-
-    private List<Float> splitcoordinates(String coordinates){
-        List<Float> latLongList= new LinkedList<>();
-        String[] latlongArray =coordinates.split(",");
-        Float latFloat=parseFloat(latlongArray[0]);
-        Float longFloat=parseFloat(latlongArray[1]);
-        latLongList.add(latFloat);
-        latLongList.add(longFloat);
-        return latLongList;
-
-    }
-
-
-    private void setDateandTime(String dateString, String time){
-        this.calendar=Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
+    @JsonProperty("location")
+    private void splitCoordinates(@NotNull String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
         try {
-            date = sdf.parse(dateString);
-            calendar.setTime(date);
-        } catch (ParseException e) {
-            log.error(String.valueOf(e));
+            String[] latLongArray = coordinates.split(",");
+            this.latitude = parseFloat(latLongArray[0]);
+            this.longitude = parseFloat(latLongArray[1]);
         }
-        calendar.set(Calendar.HOUR_OF_DAY,12);
-        calendar.set(Calendar.MINUTE,30);
+        catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
+            throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
+        }
     }
-
-
 }

@@ -6,8 +6,11 @@ import com.example.cityguardserver.api.dto.ReportVisualization;
 import com.example.cityguardserver.database.dto.Report;
 import com.example.cityguardserver.database.ReportRepository;
 import com.example.cityguardserver.api.dto.ReportForm;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,15 +105,24 @@ public class CityGuardRestController {
 
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
-    public void submitreports(@RequestBody ReportForm reportForm) {
-        Report reportInstance= new Report();
-        reportInstance.setCategory(reportForm.getCategory());
-        reportInstance.setDescription(reportForm.getDescription());
-        reportInstance.setLongitude(reportForm.getCoordinates().get(1));
-        reportInstance.setLatitude(reportForm.getCoordinates().get(0));
-        reportInstance.setCategory(reportForm.getCategory());
-        reportInstance.setDateTime(String.valueOf(reportForm.getCalendar().getTime()));
-        reportRepository.save(reportInstance);
+    public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm) {
+        if (
+                (!reportForm.getUseCurrentDateTime() && (reportForm.getReportedDate() == null | reportForm.getReportedTime() == null))
+        ) {
+            return ResponseEntity.badRequest().body("Fehlerhafte Anfrage: Du musst ein Datum angeben");
+        }
+        Report report = new Report();
+        report.setLatitude(reportForm.getLatitude());
+        report.setLongitude(reportForm.getLongitude());
+        report.setCategory(reportForm.getCategory());
+        report.setDescription(reportForm.getDescription());
+        LocalDateTime dateTime = LocalDateTime.now();
+        if (!reportForm.getUseCurrentDateTime()){
+            dateTime = reportForm.getReportedDate().atTime(reportForm.getReportedTime());
+        }
+        report.setDateTime(dateTime);
+        reportRepository.save(report);
+        return ResponseEntity.ok(":)");
     }
 }
 

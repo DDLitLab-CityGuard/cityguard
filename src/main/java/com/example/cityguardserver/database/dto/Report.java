@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 
 @Setter
 @Getter
@@ -19,8 +21,10 @@ public class Report {
     private Float latitude;
     private String description;
     private String category;
-    private String dateTime;
+    private LocalDateTime dateTime;
     private Boolean heatmap;
+
+    //TODO welche sind required??
 
 }
 
