@@ -1,10 +1,8 @@
-package com.example.cityguardserver.forms;
+package com.example.cityguardserver.api.dto;
 
-import com.example.cityguardserver.databasemodels.Category;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

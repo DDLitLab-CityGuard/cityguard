@@ -1,9 +1,11 @@
-package com.example.cityguardserver;
+package com.example.cityguardserver.api;
 
 
-import com.example.cityguardserver.databasemodels.Report;
-import com.example.cityguardserver.databasemodels.ReportRepository;
-import com.example.cityguardserver.forms.ReportForm;
+import com.example.cityguardserver.api.dto.HeatmapCell;
+import com.example.cityguardserver.api.dto.ReportVisualization;
+import com.example.cityguardserver.database.dto.Report;
+import com.example.cityguardserver.database.ReportRepository;
+import com.example.cityguardserver.api.dto.ReportForm;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class CityGuardRestController {
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping("/fetchreports")
+    @GetMapping(value = "/fetchreports", produces = "application/json")
     public ReportVisualization fetchreports(
             @RequestParam Float latitudeUpper,
             @RequestParam Float latitudeLower,
@@ -98,10 +100,6 @@ public class CityGuardRestController {
         return new float[]{clippedLat, clippedLon};
     }
 
-
-
-
-
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
     public void submitreports(@RequestBody ReportForm reportForm) {
@@ -113,8 +111,6 @@ public class CityGuardRestController {
         reportInstance.setCategory(reportForm.getCategory());
         reportInstance.setDateTime(String.valueOf(reportForm.getCalendar().getTime()));
         reportRepository.save(reportInstance);
-
-
     }
 }
 

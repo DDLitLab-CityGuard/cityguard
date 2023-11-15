@@ -1,4 +1,4 @@
-package com.example.cityguardserver.databasemodels;
+package com.example.cityguardserver.database.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
-package com.example.cityguardserver;
+package com.example.cityguardserver.api.dto;
 
-import com.example.cityguardserver.databasemodels.Report;
+import com.example.cityguardserver.database.dto.Report;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package com.example.cityguardserver;
+package com.example.cityguardserver.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;
