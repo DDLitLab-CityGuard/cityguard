@@ -38,7 +38,7 @@ public class CityGuardRestController {
 
         for (Report report : selectedReports) {
 
-            if (!report.getHeatmap()){
+            if (report.getHeatmap() == null || !report.getHeatmap()){
                 markerReports.add(report);
             }
 
