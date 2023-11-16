@@ -3,24 +3,25 @@ submitButton=document.getElementById('submitevent')
 submitForm=document.getElementById('submit_form')
 
 
-  function gettheformdata(){
+function gettheformdata(form){
         // Create a FormData object from the form
-  const formData = new FormData(submitForm);
+const formData = new FormData(form);
   
 // Convert FormData to JSON
 const formDataObject = {};
 formData.forEach((value, key) => {
   formDataObject[key] = value;
 });
-  jsondict=JSON.stringify(formDataObject) // Convert data to JSON string
-    return jsondict
+jsondict=JSON.stringify(formDataObject) // Convert data to JSON string
+return jsondict
   }
 
-  function makePostRequest(){
+function makePostRequest(){
+    console.log("SENDING THE REQUEST")
     // URL endpoint for the POST request
     const url = "http://127.0.0.1:5123/api/submit_report";
     // Data to be sent in the POST request (can be a JSON object, FormData, etc.)
-    data=gettheformdata();
+    data=gettheformdata(submitForm);
 
     // Fetch options
     const options = {
@@ -55,10 +56,30 @@ formData.forEach((value, key) => {
 
   };
 
+
+
   submitButton.addEventListener('click', function(event){
+    event.preventDefault();
+    clearTheValidations();
+
+    if (formIsInvalid(submitForm)) {
+      console.log("validation failed")
+
+    }
+    else{
+    console.log("closing the modal")
     //make fetch post request
     makePostRequest();
+    closeTheModal();
 
-    //clear the model form fields
+      //clear the model form fields
     submitForm.reset()
+    submitButton.removeAttribute("data-bs-dismiss","modal")
+
+    }
+    
   });
+
+
+
+
