@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.ToString;
+
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.regex.PatternSyntaxException;
 
 import static java.lang.Float.parseFloat;
@@ -16,7 +18,7 @@ import static java.lang.Float.parseFloat;
 
 @Getter
 @Setter
-@Slf4j
+@ToString
 public class ReportForm {
 
     private float latitude;
@@ -32,15 +34,15 @@ public class ReportForm {
     @Size(max = 255)
     private String description;
 
-    @JsonProperty("currentDatetime")
-    private Boolean useCurrentDateTime = false;
-
-    @JsonProperty("currentLocation")
-    private Boolean useCurrentLocation = false;
-
     @JsonProperty("category")
     @NotNull
     private String category;
+
+    private Boolean useCurrentDateTime = false;
+
+    private Boolean useCurrentLocation = false;
+
+
     @JsonProperty("location")
     private void splitCoordinates(@NotNull String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
         try {
@@ -51,5 +53,15 @@ public class ReportForm {
         catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
             throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
         }
+    }
+
+    @JsonProperty("currentDateTime")
+    public void setUseCurrentDateTime(Boolean useCurrentDateTime) {
+        this.useCurrentDateTime = Objects.requireNonNullElse(useCurrentDateTime, true);
+    }
+
+    @JsonProperty("currentLocation")
+    public void setUseCurrentLocation(Boolean useCurrentLocation) {
+        this.useCurrentLocation = Objects.requireNonNullElse(useCurrentLocation, true);
     }
 }

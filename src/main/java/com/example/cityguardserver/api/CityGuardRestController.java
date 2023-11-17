@@ -107,7 +107,7 @@ public class CityGuardRestController {
     @PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
     public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm) {
         if (
-                (!reportForm.getUseCurrentDateTime() && (reportForm.getReportedDate() == null | reportForm.getReportedTime() == null))
+                (!reportForm.getUseCurrentDateTime() && (reportForm.getReportedDate() == null || reportForm.getReportedTime() == null))
         ) {
             return ResponseEntity.badRequest().body("Fehlerhafte Anfrage: Du musst ein Datum angeben");
         }
@@ -121,6 +121,7 @@ public class CityGuardRestController {
             dateTime = reportForm.getReportedDate().atTime(reportForm.getReportedTime());
         }
         report.setDateTime(dateTime);
+        System.out.println(report);
         reportRepository.save(report);
         return ResponseEntity.ok(":)");
     }
