@@ -6,7 +6,8 @@ reportButton=document.getElementById('report_button')
 function fetchCategoriesAndRenderOptions() {
     select = document.getElementById('selectCategory');
     removeCategoryOptions(select);
-    fetch('http://127.0.0.1:5123/api/fetch_categories')
+    fetch(document.location.protocol+"//"+document.location.hostname+":5123/api/fetch_categories")
+
         .then(response => response.json())
         .then(data => {
             for (var i = 0; i<data.length; i++){
