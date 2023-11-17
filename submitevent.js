@@ -1,6 +1,8 @@
 //csrftoken??
 submitButton=document.getElementById('submitevent') 
+closeButton=document.getElementById('closeModal')
 submitForm=document.getElementById('submit_form')
+
 
 
 function gettheformdata(form){
@@ -13,6 +15,7 @@ formData.forEach((value, key) => {
   formDataObject[key] = value;
 });
 jsondict=JSON.stringify(formDataObject) // Convert data to JSON string
+
 return jsondict
   }
 

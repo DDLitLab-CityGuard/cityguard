@@ -66,6 +66,12 @@ return true;
 
 
 function clearTheValidations(){
+
+    error=document.getElementById("location-feedback")
+    error.innerHTML=""
+
+
+
    var elements = document.querySelectorAll('.is-invalid');
    console.log(elements)
 
@@ -78,7 +84,7 @@ function clearTheValidations(){
 
 
 function closeTheModal(){
-    submitButton.setAttribute("data-bs-dismiss","modal")
-    submitButton.click();
+    closeButton.click()
+
 }
 
