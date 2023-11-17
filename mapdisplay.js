@@ -22,7 +22,7 @@ function fetchandrender() {
     lonl = map.getBounds().getSouthWest().lng -0.01
     latu = map.getBounds().getNorthEast().lat + 0.01
     lonu = map.getBounds().getNorthEast().lng + 0.01
-    fetch(`http://cityguard.isa.uni-hamburg.de:5123/api/fetchreports?latitudeLower=${latl}&latitudeUpper=${latu}&longitudeLeft=${lonl}&longitudeRight=${lonu}`)
+    fetch(`http://127.0.0.1:5123/api/fetch_reports?latitudeLower=${latl}&latitudeUpper=${latu}&longitudeLeft=${lonl}&longitudeRight=${lonu}`)
         .then(response => response.json())
         .then(data => {
             heatmapGroup.clearLayers();

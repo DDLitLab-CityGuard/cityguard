@@ -22,7 +22,7 @@ return jsondict
 function makePostRequest(){
     console.log("SENDING THE REQUEST")
     // URL endpoint for the POST request
-    const url = "http://cityguard.isa.uni-hamburg.de:5123/api/submit_report";
+    const url = "http://127.0.0.1:5123/api/submit_report";
     // Data to be sent in the POST request (can be a JSON object, FormData, etc.)
     data=gettheformdata(submitForm);
 
