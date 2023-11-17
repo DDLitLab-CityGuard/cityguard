@@ -1,5 +1,6 @@
 package com.example.cityguardserver.api.dto;
 
+import com.example.cityguardserver.database.dto.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,14 +35,14 @@ public class ReportForm {
     @Size(max = 255)
     private String description;
 
-    @JsonProperty("category")
-    @NotNull
-    private String category;
-
+   
     private Boolean useCurrentDateTime = false;
 
     private Boolean useCurrentLocation = false;
 
+    @JsonProperty("category")
+    @NotNull
+    private Category category;
 
     @JsonProperty("location")
     private void splitCoordinates(@NotNull String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{

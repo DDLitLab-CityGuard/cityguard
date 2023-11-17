@@ -3,6 +3,8 @@ package com.example.cityguardserver.api;
 
 import com.example.cityguardserver.api.dto.HeatmapCell;
 import com.example.cityguardserver.api.dto.ReportVisualization;
+import com.example.cityguardserver.database.CategoryRepository;
+import com.example.cityguardserver.database.dto.Category;
 import com.example.cityguardserver.database.dto.Report;
 import com.example.cityguardserver.database.ReportRepository;
 import com.example.cityguardserver.api.dto.ReportForm;
@@ -21,15 +23,17 @@ import java.util.Map;
 public class CityGuardRestController {
 
     private final ReportRepository reportRepository;
+    private final CategoryRepository categoryRepository;
 
 
-    public CityGuardRestController(ReportRepository reportRepository) {
+    public CityGuardRestController(ReportRepository reportRepository, CategoryRepository categoryRepository) {
         this.reportRepository = reportRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping(value = "/fetchreports", produces = "application/json")
-    public ReportVisualization fetchreports(
+    @GetMapping(value = "/fetch_reports", produces = "application/json")
+    public ReportVisualization fetchReports(
             @RequestParam Float latitudeUpper,
             @RequestParam Float latitudeLower,
             @RequestParam Float longitudeLeft,
@@ -124,6 +128,13 @@ public class CityGuardRestController {
         System.out.println(report);
         reportRepository.save(report);
         return ResponseEntity.ok(":)");
+    }
+
+
+    @CrossOrigin(origins = "*")
+    @GetMapping(value = "/fetch_categories",produces = "application/json")
+    public List<Category> fetchCategories(){
+        return categoryRepository.findAll();
     }
 }
 
