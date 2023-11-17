@@ -77,8 +77,6 @@ function makePostRequest(){
 
       //clear the model form fields
     submitForm.reset()
-    submitButton.removeAttribute("data-bs-dismiss","modal")
-
     }
     
   });

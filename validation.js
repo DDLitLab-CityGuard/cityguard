@@ -16,23 +16,29 @@ function formIsInvalid(form){
 
 function validateLocation(location,checkBox){
     if (checkBox == undefined){
-        let regex = /([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[Ee]([+-]?\d+))?,([+-]?(?=\.\d|\d)(?:\d+)?(?:\.?\d*))(?:[Ee]([+-]?\d+))?/i;
-        if (location==""){document.getElementById("location").classList.add("is-invalid")
+        let regex =/[0-9]*\.[0-9]+,[0-9]*\.[0-9]+/i;
+        if (location==""){
+        document.getElementById("location").classList.add("is-invalid")
         document.getElementById("locationcheckbox").classList.add("is-invalid")
         error =document.getElementById("location-feedback")
         var text = document.createTextNode("Please check the checkbox or type the coordinates");
         error.appendChild(text);
         return false;}
-        if (location.match(regex)==null){
+
+
+        else {
+            if(location.match(regex)==null){
             document.getElementById("location").classList.add("is-invalid")
             document.getElementById("locationcheckbox").classList.add("is-invalid")
             error=document.getElementById("location-feedback")
             var text = document.createTextNode("Please correct the coordinates");
             error.appendChild(text);
-            return false;
+            return false;}
             
+            return true;
         }
     }
+
     else{
    return true;}
 }
