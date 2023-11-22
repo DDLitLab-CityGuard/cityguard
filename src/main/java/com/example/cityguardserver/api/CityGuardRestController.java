@@ -47,8 +47,9 @@ public class CityGuardRestController {
 
         for (Report report : selectedReports) {
 
-            if (report.getHeatmap() == null || !report.getHeatmap()){
+            if (report.getCategory().getAllowDiscrete()){
                 markerReports.add(report);
+                continue;
             }
 
             float[] clippedCords = clipToKilometers(report.getLatitude(), report.getLongitude(), size, latitudeUpper);
@@ -115,19 +116,26 @@ public class CityGuardRestController {
         ) {
             return ResponseEntity.badRequest().body("Fehlerhafte Anfrage: Du musst ein Datum angeben");
         }
+        if(categoryRepository.findById(reportForm.getCategoryId()).isEmpty()){
+            return ResponseEntity.badRequest().body("Fehlerhafte Anfrage: Die angegebene Kategorie existiert nicht");
+        }
         Report report = new Report();
-        report.setLatitude(reportForm.getLatitude());
-        report.setLongitude(reportForm.getLongitude());
-        report.setCategory(reportForm.getCategory());
+        if(reportForm.getUseCurrentLocation()){
+            report.setLatitude(reportForm.getMeasured_latitude());
+            report.setLongitude(reportForm.getMeasured_longitude());
+        }else{
+            report.setLatitude(reportForm.getLatitude());
+            report.setLongitude(reportForm.getLongitude());
+        }
+        report.setCategory(categoryRepository.findById(reportForm.getCategoryId()).orElseThrow());
         report.setDescription(reportForm.getDescription());
         LocalDateTime dateTime = LocalDateTime.now();
         if (!reportForm.getUseCurrentDateTime()){
             dateTime = reportForm.getReportedDate().atTime(reportForm.getReportedTime());
         }
         report.setDateTime(dateTime);
-        System.out.println(report);
         reportRepository.save(report);
-        return ResponseEntity.ok(":)");
+        return ResponseEntity.ok("{\"status\": \"success\"}");
     }
 
 

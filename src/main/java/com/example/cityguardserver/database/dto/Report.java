@@ -22,7 +22,7 @@ public class Report {
     @ManyToOne
     private Category category;
     private LocalDateTime dateTime;
-    private Boolean heatmap;
+
 
 
     //TODO welche sind required??
