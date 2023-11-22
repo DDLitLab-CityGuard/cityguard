@@ -20,7 +20,6 @@ return jsondict
   }
 
 function makePostRequest(){
-    console.log("SENDING THE REQUEST")
     // URL endpoint for the POST request
     const url = document.location.protocol+"//"+document.location.hostname+":5123/api/submit_report";
 
@@ -51,11 +50,9 @@ function makePostRequest(){
     })
     .then(data => {
     // Handle the data returned by the server
-    console.log(data);
     })
   .catch(error => {
   // Handle any errors that occurred during the fetch
-    console.error('Fetch error:', error);
   });
 
   };
@@ -67,11 +64,9 @@ function makePostRequest(){
     clearTheValidations();
 
     if (formIsInvalid(submitForm)) {
-      console.log("validation failed")
 
     }
     else{
-    console.log("closing the modal")
     //make fetch post request
     makePostRequest();
     closeTheModal();

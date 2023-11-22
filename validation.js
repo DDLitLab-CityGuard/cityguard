@@ -79,7 +79,6 @@ function clearTheValidations(){
 
 
    var elements = document.querySelectorAll('.is-invalid');
-   console.log(elements)
 
     // Iterate over the elements and remove the class
     for(let i=0; i<elements.length;i++){
