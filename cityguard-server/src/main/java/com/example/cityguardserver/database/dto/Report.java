@@ -7,7 +7,11 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-
+/**
+ *  Entity for the Report Table in the Database.
+ *  It is a Spring Data JPA entity, so it will map the class to the Report Table.
+ *  That means that the fields of this class will be columns of the Report Table.
+ */
 @Setter
 @Getter
 @Entity

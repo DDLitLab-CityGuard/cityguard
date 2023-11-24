@@ -16,7 +16,11 @@ import java.util.regex.PatternSyntaxException;
 
 import static java.lang.Float.parseFloat;
 
-
+/**
+ * This class is used to deserialize the data of a report submission during an api call.
+ * That means that the fields of this class will be parsed from the JSON object.
+ * After the parsing the data will be validated and further processed to create a Report object that might be saved in the database.
+ */
 @Getter
 @Setter
 @ToString
