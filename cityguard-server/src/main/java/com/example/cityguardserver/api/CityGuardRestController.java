@@ -18,6 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST Controller for the CityGuard App.
+ * It provides the following endpoints:
+ * - GET /api/fetch_reports
+ * - POST /api/submit_report
+ * - GET /api/fetch_categories
+ */
 @RestController
 @RequestMapping("/api")
 public class CityGuardRestController {
@@ -31,6 +38,14 @@ public class CityGuardRestController {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * This endpoint fetches all reports in a given area and calculates a heatmap based on the reports.
+     * @param latitudeUpper The upper latitude of the area
+     * @param latitudeLower The lower latitude of the area
+     * @param longitudeLeft The left longitude of the area
+     * @param longitudeRight The right longitude of the area
+     * @return A JSON object containing a heatmap and a list of markers for all the data in the specified area
+     */
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/fetch_reports", produces = "application/json")
     public ReportVisualization fetchReports(
@@ -83,6 +98,9 @@ public class CityGuardRestController {
         return reportVisualization;
     }
 
+    /*
+     * This helper method increases the value of a tile in the heatmap during the calculation of the heatmap.
+     */
     private void increaseTileValue(Map<Float, Map<Float, Float>> counter, float lat, float lon, float value){
         if(counter.containsKey(lat)) {
             if(counter.get(lat).containsKey(lon)) {
@@ -97,17 +115,30 @@ public class CityGuardRestController {
         }
     }
 
+    /*
+     * This helper method calculates the length of a degree of longitude at a given latitude.
+     */
     private float lonKmAtLatitude(float latitude) {
         float stabilizedLat = (float) (Math.floor(latitude * 10f) / 10f);
         return (float) (Math.cos(Math.toRadians(stabilizedLat)) * 111.32);
     }
 
+    /*
+     * This helper method clips a coordinate to a given grid size.
+     * That means that the coordinate is rounded to the next multiple of the grid size.
+     */
     private float[] clipToKilometers(float lat, float lon, float kilometers, float referenceLatitude){
         float clippedLat = (float) (Math.floor(lat * (111f / kilometers)) / (111f / kilometers));
         float clippedLon = (float) (Math.floor(lon * (lonKmAtLatitude(referenceLatitude) / kilometers)) / (lonKmAtLatitude(referenceLatitude) / kilometers));
         return new float[]{clippedLat, clippedLon};
     }
 
+    /**
+     * This endpoint submits a report to the server.
+     * It takes a JSON object as input that is derived from the ReportForm class.
+     * @param reportForm The report to submit
+     * @return A JSON object containing the status of the request or an error message
+     */
     @CrossOrigin(origins = "*")
     @PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
     public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm) {
@@ -139,6 +170,11 @@ public class CityGuardRestController {
     }
 
 
+    /**
+     * This endpoint fetches all categories from the database.
+     * A Report needs a category to be submitted so the client needs to know all categories.
+     * @return A JSON object containing all categories
+     */
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/fetch_categories",produces = "application/json")
     public List<Category> fetchCategories(){
