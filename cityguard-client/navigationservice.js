@@ -3,7 +3,7 @@ export class NavigationService{
         this.checkbox =checkbox
         this.eingabeFeld=eingabefeld
         this.location_hidden=location_hidden
-        this.checkbox.addEventListener("change",this.checkboxChanged);
+        this.checkbox.addEventListener("change", this.checkboxChanged.bind(this));
     }
 
 

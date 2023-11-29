@@ -1,19 +1,17 @@
 export class Mapdisplayservice{
 
     constructor(map) {
-
         this.map=map
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-        this.markergroup = L.layerGroup().addto(map);
-        this.heatmapgroup = L.layerGroup().addto(map);
+        this.markergroup = L.layerGroup().addTo(map);
+        this.heatmapgroup = L.layerGroup().addTo(map);
 
-        map.on('moveend', this.fetchandrender);
-
-
+        map.on('moveend', this.fetchandrender.bind(this));
     }
+
     fetchandrender(){
         let latl = this.map.getBounds().getSouthWest().lat - 0.01
         let lonl = this.map.getBounds().getSouthWest().lng -0.01

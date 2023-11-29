@@ -1,10 +1,13 @@
+
 import {Mapdisplayservice} from "./mapdisplayservice.js";
 import {FormService} from "./formservice.js";
 import {NavigationService} from "./navigationservice.js";
 
+
 function main() {
-    let reportButton = document.getElementById('reportButton');
-    let submitButton = document.getElementById('submitButton');
+    let reportButton = document.getElementById('report_button');
+
+    let submitButton = document.getElementById('submitevent');
     let closeButton = document.getElementById('closeModal');
     let checkbox = document.getElementById("locationcheckbox");
     let eingabeFeld = document.getElementById("location");
@@ -16,5 +19,4 @@ function main() {
     let navgationservice =new NavigationService(checkbox,eingabeFeld,location_hidden);
 }
 
-main()
-
+document.addEventListener('DOMContentLoaded', main);
