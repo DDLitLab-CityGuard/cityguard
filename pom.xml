@@ -17,7 +17,6 @@
 
     <modules>
         <module>cityguard-server</module>
-        <module>cityguard-client</module>
     </modules>
 
 
