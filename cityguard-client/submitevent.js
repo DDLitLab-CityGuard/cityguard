@@ -21,7 +21,7 @@ return jsondict
 
 function makePostRequest(){
     // URL endpoint for the POST request
-    const url = document.location.protocol+"//"+document.location.hostname+":5123/api/submit_report";
+    const url = document.location.protocol+"//"+document.location.hostname+":8080/api/submit_report";
 
     // Data to be sent in the POST request (can be a JSON object, FormData, etc.)
     data=gettheformdata(submitForm);
