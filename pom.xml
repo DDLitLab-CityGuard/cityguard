@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>org.example</groupId>
+    <groupId>de.uni_hamburg.isa.cityguard</groupId>
     <artifactId>cityguard</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>main</version>
     <packaging>pom</packaging>
 
     <modules>
