@@ -26,63 +26,63 @@ import static java.lang.Float.parseFloat;
 @ToString
 public class ReportForm {
 
-    private float latitude;
-    private float longitude;
+	private float latitude;
+	private float longitude;
 
-    private float measured_latitude;
-    private float measured_longitude;
+	private float measured_latitude;
+	private float measured_longitude;
 
-    @JsonProperty("date")
-    private LocalDate reportedDate; //ISO 8601
+	@JsonProperty("date")
+	private LocalDate reportedDate; //ISO 8601
 
-    @JsonProperty("time")
-    private LocalTime reportedTime; //ISO 8601
+	@JsonProperty("time")
+	private LocalTime reportedTime; //ISO 8601
 
-    @JsonProperty("desc")
-    @Size(max = 255)
-    private String description;
+	@JsonProperty("desc")
+	@Size(max = 255)
+	private String description;
 
-   
-    private Boolean useCurrentDateTime = false;
 
-    private Boolean useCurrentLocation = false;
+	private Boolean useCurrentDateTime = false;
 
-    @JsonProperty("category")
-    @NotNull
-    @ManyToOne
-    private Long categoryId;
+	private Boolean useCurrentLocation = false;
 
-    @JsonProperty("location")
-    private void splitCoordinates(String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
-        try {
-            String[] latLongArray = coordinates.split(",");
-            this.latitude = parseFloat(latLongArray[0]);
-            this.longitude = parseFloat(latLongArray[1]);
-        }
-        catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
-            throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
-        }
-    }
+	@JsonProperty("category")
+	@NotNull
+	@ManyToOne
+	private Long categoryId;
 
-    @JsonProperty("location_hidden")
-    private void splitCoordinatesHidden(String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
-        try {
-            String[] latLongArray = coordinates.split(",");
-            this.measured_latitude = parseFloat(latLongArray[0].strip());
-            this.measured_longitude = parseFloat(latLongArray[1].strip());
-        }
-        catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
-            throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
-        }
-    }
+	@JsonProperty("location")
+	private void splitCoordinates(String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
+		try {
+			String[] latLongArray = coordinates.split(",");
+			this.latitude = parseFloat(latLongArray[0]);
+			this.longitude = parseFloat(latLongArray[1]);
+		}
+		catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
+			throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
+		}
+	}
 
-    @JsonProperty("currentDateTime")
-    public void setUseCurrentDateTime(Boolean useCurrentDateTime) {
-        this.useCurrentDateTime = Objects.requireNonNullElse(useCurrentDateTime, true);
-    }
+	@JsonProperty("location_hidden")
+	private void splitCoordinatesHidden(String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
+		try {
+			String[] latLongArray = coordinates.split(",");
+			this.measured_latitude = parseFloat(latLongArray[0].strip());
+			this.measured_longitude = parseFloat(latLongArray[1].strip());
+		}
+		catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
+			throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
+		}
+	}
 
-    @JsonProperty("currentLocation")
-    public void setUseCurrentLocation(Boolean useCurrentLocation) {
-        this.useCurrentLocation = Objects.requireNonNullElse(useCurrentLocation, true);
-    }
+	@JsonProperty("currentDateTime")
+	public void setUseCurrentDateTime(Boolean useCurrentDateTime) {
+		this.useCurrentDateTime = Objects.requireNonNullElse(useCurrentDateTime, true);
+	}
+
+	@JsonProperty("currentLocation")
+	public void setUseCurrentLocation(Boolean useCurrentLocation) {
+		this.useCurrentLocation = Objects.requireNonNullElse(useCurrentLocation, true);
+	}
 }

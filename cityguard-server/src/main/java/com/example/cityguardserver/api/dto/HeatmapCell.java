@@ -13,9 +13,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HeatmapCell {
-    private float latitude;
-    private float longitude;
-    private float sizeLat;
-    private float sizeLon;
-    private float value;
+	private float latitude;
+	private float longitude;
+	private float sizeLat;
+	private float sizeLon;
+	private float value;
 }

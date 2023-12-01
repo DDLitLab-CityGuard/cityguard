@@ -17,20 +17,18 @@ import java.time.LocalDateTime;
 @Entity
 @ToString
 public class Report {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Float longitude;
-    private Float latitude;
-    private String description;
-    @ManyToOne
-    private Category category;
-    private LocalDateTime dateTime;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Float longitude;
+	private Float latitude;
+	private String description;
+	@ManyToOne
+	private Category category;
+	private LocalDateTime dateTime;
 
 
 
-    //TODO welche sind required??
+	//TODO welche sind required??
 
 }
-
-

@@ -19,27 +19,27 @@ import java.util.List;
 @Repository
 public interface ReportRepository extends JpaRepository<Report,Long> {
 
-    /**
-     *  Find all the reports in the database that are between the given bounds.
-     *  The bounds are defined by the minimum and maximum longitude and latitude.
-     *  The longitude bounds can be inverted, so that the bounds can be defined
-     *  even if they cross the 180th meridian.
-     *  @param minLongitude the minimum longitude
-     *  @param maxLongitude the maximum longitude
-     *  @param minLatitude the minimum latitude
-     *  @param maxLatitude the maximum latitude
-     *  @return the list of reports that are between the given bounds
-     */
-    @Query(
-            "SELECT r FROM Report r "
-            + "WHERE ( (:minlo < :maxlo AND r.longitude > :minlo AND r.longitude < :maxlo) OR (:minlo > :maxlo AND (r.longitude > :minlo OR r.longitude < :maxlo)) ) "
-            + "AND (r.latitude > :minlat AND r.latitude < :maxlat)"
-    )
-    List<Report> findBetweenBounds(
-            @Param("minlo") Float minLongitude,
-            @Param("maxlo") Float maxLongitude,
-            @Param("minlat") Float minLatitude,
-            @Param("maxlat") Float maxLatitude
-    );
+	/**
+	 *  Find all the reports in the database that are between the given bounds.
+	 *  The bounds are defined by the minimum and maximum longitude and latitude.
+	 *  The longitude bounds can be inverted, so that the bounds can be defined
+	 *  even if they cross the 180th meridian.
+	 *  @param minLongitude the minimum longitude
+	 *  @param maxLongitude the maximum longitude
+	 *  @param minLatitude the minimum latitude
+	 *  @param maxLatitude the maximum latitude
+	 *  @return the list of reports that are between the given bounds
+	 */
+	@Query(
+			"SELECT r FROM Report r "
+			+ "WHERE ( (:minlo < :maxlo AND r.longitude > :minlo AND r.longitude < :maxlo) OR (:minlo > :maxlo AND (r.longitude > :minlo OR r.longitude < :maxlo)) ) "
+			+ "AND (r.latitude > :minlat AND r.latitude < :maxlat)"
+	)
+	List<Report> findBetweenBounds(
+			@Param("minlo") Float minLongitude,
+			@Param("maxlo") Float maxLongitude,
+			@Param("minlat") Float minLatitude,
+			@Param("maxlat") Float maxLatitude
+	);
 
 }

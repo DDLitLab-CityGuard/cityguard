@@ -15,6 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ReportVisualization {
-    private List<Report> markers;
-    private List<HeatmapCell> heatmap;
+	private List<Report> markers;
+	private List<HeatmapCell> heatmap;
 }
