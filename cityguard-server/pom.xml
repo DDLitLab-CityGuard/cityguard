@@ -4,13 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.example</groupId>
+        <groupId>de.uni_hamburg.isa.cityguard</groupId>
         <artifactId>cityguard</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>main</version>
     </parent>
     
     <artifactId>cityguard-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>cityguard-server</name>
     <description>cityguard-server</description>
 
@@ -54,6 +53,7 @@
     </dependencies>
 
     <build>
+        <finalName>${artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
