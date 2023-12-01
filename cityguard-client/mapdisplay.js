@@ -22,7 +22,7 @@ function fetchandrender() {
     lonl = map.getBounds().getSouthWest().lng -0.01
     latu = map.getBounds().getNorthEast().lat + 0.01
     lonu = map.getBounds().getNorthEast().lng + 0.01
-    fetch(document.location.protocol+"//"+document.location.hostname+`:5123/api/fetch_reports?latitudeLower=${latl}&latitudeUpper=${latu}&longitudeLeft=${lonl}&longitudeRight=${lonu}`)
+    fetch(document.location.protocol+"//"+document.location.hostname+`:8088/api/fetch_reports?latitudeLower=${latl}&latitudeUpper=${latu}&longitudeLeft=${lonl}&longitudeRight=${lonu}`)
         .then(response => response.json())
         .then(data => {
             heatmapGroup.clearLayers();

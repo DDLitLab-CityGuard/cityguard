@@ -16,10 +16,10 @@ import lombok.Setter;
 @Getter
 @Entity
 public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private  String name;
-    private Boolean allowDiscrete;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private  String name;
+	private Boolean allowDiscrete;
 
-  }
+}
