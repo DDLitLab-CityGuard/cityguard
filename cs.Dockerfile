@@ -1,7 +1,9 @@
 FROM maven:3-eclipse-temurin-17 as build
 WORKDIR /workspace/cg
+COPY pom.xml ./pom.xml
+COPY cityguard-server/pom.xml ./cityguard-server/pom.xml
+RUN mvn dependency:resolve
 COPY . .
-RUN mvn install
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre
