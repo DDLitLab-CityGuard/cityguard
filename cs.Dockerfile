@@ -1,6 +1,7 @@
 FROM maven:3-eclipse-temurin-17 as build
 WORKDIR /workspace/cg
 COPY . .
+RUN mvn install
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre
