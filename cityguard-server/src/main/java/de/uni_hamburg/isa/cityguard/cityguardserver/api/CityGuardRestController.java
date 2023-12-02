@@ -1,13 +1,12 @@
-package com.example.cityguardserver.api;
+package de.uni_hamburg.isa.cityguard.cityguardserver.api;
 
-
-import com.example.cityguardserver.api.dto.HeatmapCell;
-import com.example.cityguardserver.api.dto.ReportVisualization;
-import com.example.cityguardserver.database.CategoryRepository;
-import com.example.cityguardserver.database.dto.Category;
-import com.example.cityguardserver.database.dto.Report;
-import com.example.cityguardserver.database.ReportRepository;
-import com.example.cityguardserver.api.dto.ReportForm;
+import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
+import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportForm;
+import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportVisualization;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.example.cityguardserver.database.dto;
+package de.uni_hamburg.isa.cityguard.cityguardserver.database.dto;
 
 import jakarta.persistence.*;
 import lombok.Getter;
