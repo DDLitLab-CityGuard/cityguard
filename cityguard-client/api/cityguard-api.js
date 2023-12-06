@@ -8,6 +8,9 @@ export function fetchCategories(func){
 			func(data)
 		});
 }
+export function fetchCoordinatesMatchingString(locationString){
+
+}
 
 export function fetchReports(latitudeLower, latitudeUpper, longitudeLeft, longitudeRight, func){
 	fetch(`${apiEndpoint}/fetch_reports?` + new URLSearchParams(
@@ -39,4 +42,6 @@ export function submitReport(report){
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 		});
+
 }
+

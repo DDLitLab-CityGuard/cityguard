@@ -1,5 +1,6 @@
 import {checkboxChanged, closeTheModal, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
+import {fetchCoordinatesFromInput} from "./geocodingservice.js";
 
 function main() {
 	let reportButton = document.getElementById('report_button');
@@ -9,13 +10,14 @@ function main() {
 	let inputField = document.getElementById("location");
 	let hiddenInputField = document.getElementById("location_hidden");
 	let submitForm = document.getElementById('submit_form');
+	let locationInput = document.getElementById('location');
 	let map = L.map('map').setView([53.566819239846915, 10.004717089957754], 13);
 
 	reportButton.addEventListener('click', fetchCategoriesAndRenderOptions);
 	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e, closeButton));
 	closeButton.addEventListener('click', () => closeTheModal(closeButton));
 	checkbox.addEventListener("change", () => checkboxChanged(checkbox, inputField, hiddenInputField));
-
+	locationinput.addEventListener('keyup', (e) => fetchCoordinatesFromInput(locationInput,e));
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
