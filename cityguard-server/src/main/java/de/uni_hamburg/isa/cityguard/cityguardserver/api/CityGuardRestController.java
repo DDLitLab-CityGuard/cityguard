@@ -38,7 +38,7 @@ public class CityGuardRestController {
 	}
 
 	/**
-	 * This endpoint fetches all reports in a given area and calculates a heatmap based on the reports.
+	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports (the other reports st.
 	 * @param latitudeUpper The upper latitude of the area
 	 * @param latitudeLower The lower latitude of the area
 	 * @param longitudeLeft The left longitude of the area

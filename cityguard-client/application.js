@@ -1,6 +1,16 @@
+/**
+ * This module is the entry point of the application.
+ * It contains the main function that is called when the DOM is loaded.
+ * @module application
+ */
 import {checkboxChanged, closeTheModal, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 
+
+/**
+ * Main function of the application. It is called when the DOM is loaded.
+ * Hear we start the application by adding event listeners to the buttons and initializing the map.
+ */
 function main() {
 	let reportButton = document.getElementById('report_button');
 	let submitButton = document.getElementById('submitevent');
@@ -13,7 +23,6 @@ function main() {
 
 	reportButton.addEventListener('click', fetchCategoriesAndRenderOptions);
 	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e, closeButton));
-	closeButton.addEventListener('click', () => closeTheModal(closeButton));
 	checkbox.addEventListener("change", () => checkboxChanged(checkbox, inputField, hiddenInputField));
 
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

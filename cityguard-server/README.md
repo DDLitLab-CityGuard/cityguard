@@ -1,4 +1,4 @@
-# Creating the Backend and Database Containers
+# Manually creating the Backend and Database Containers from source without the rest of the stack
 
 1. **Pull the Postgres Image from Dockerhub**
 

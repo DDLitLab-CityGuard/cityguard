@@ -1,4 +1,4 @@
-# Anleitung zum Starten des Projekts mit Docker
+# Anleitung um den Client from Scratch zu starten (ohne die anderen Container)
 
 ## Erstmaliges Starten des Containers
 

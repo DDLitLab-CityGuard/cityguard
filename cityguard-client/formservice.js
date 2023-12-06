@@ -1,24 +1,16 @@
+/**
+ *  This module contains all the functions that are needed to display, validate and submit the report form.
+ *  When the user clicks on the "Report" button, the form is displayed in a modal. The user can then fill out the form and submit it.
+ *  All those interactions are handled by the functions in this file.
+ *  @module formservice
+ */
 import {submitReport, fetchCategories} from "./api/cityguard-api.js";
 import {getCoordinates} from "./navigationservice.js";
 
-export function validationAndSubmit(submitForm, event, closeButton){
-
-	event.preventDefault();
-	clearTheValidations();
-
-
-
-	if (!formIsInvalid(submitForm)) {
-		//make fetch post request
-		makePostRequest(submitForm);
-		closeTheModal(closeButton);
-
-		//clear the model form fields
-		submitForm.reset()
-	}
-}
-
-//fetch categories from api
+/**
+ * This function is called when the user clicks on the "Report" button.
+ * It is responsible for fetching the categories from the API and rendering them as options in the dropdown menu for the category selection.
+ */
 export function fetchCategoriesAndRenderOptions() {
 	let select = document.getElementById('selectCategory');
 	removeCategoryOptions(select);
@@ -31,6 +23,38 @@ export function fetchCategoriesAndRenderOptions() {
 	});
 }
 
+/**
+ * This function is called when the user clicks on the "Submit" button.
+ * It is responsible for validating the form and submitting it to the API by calling helper functions.
+ *
+ * @param submitForm
+ * @param event
+ * @param closeButton
+ */
+export function validationAndSubmit(submitForm, event, closeButton){
+
+	event.preventDefault();
+	clearTheValidations();
+
+	if (!formIsInvalid(submitForm)) {
+		//make fetch post request
+		makePostRequest(submitForm);
+		closeTheModal(closeButton);
+
+		//clear the model form fields
+		submitForm.reset()
+	}
+}
+
+/**
+ * This function is called when the user clicks on the checkbox for the current location.
+ * It is responsible for disabling the input field for the location and filling it with the current location.
+ *
+ * @param checkbox
+ * @param inputField
+ * @param hiddenInputField
+ * @returns {Promise<void>}
+ */
 export async function checkboxChanged(checkbox, inputField, hiddenInputField){
 	if (checkbox.checked) {
 		inputField.disabled = true;
@@ -44,6 +68,10 @@ export async function checkboxChanged(checkbox, inputField, hiddenInputField){
 	}
 }
 
+/**
+ * This function provides a simple way to close the modal programmatically.
+ * @param closeButton
+ */
 export function closeTheModal(closeButton){
 	closeButton.click()
 }
