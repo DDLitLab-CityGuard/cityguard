@@ -12,7 +12,7 @@ function main() {
 	let map = L.map('map').setView([53.566819239846915, 10.004717089957754], 13);
 
 	reportButton.addEventListener('click', fetchCategoriesAndRenderOptions);
-	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e));
+	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e, closeButton));
 	closeButton.addEventListener('click', () => closeTheModal(closeButton));
 	checkbox.addEventListener("change", () => checkboxChanged(checkbox, inputField, hiddenInputField));
 
