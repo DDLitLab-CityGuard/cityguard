@@ -1,15 +1,17 @@
 import {submitReport, fetchCategories} from "./api/cityguard-api.js";
 import {getCoordinates} from "./navigationservice.js";
 
-export function validationAndSubmit(submitForm, event){
+export function validationAndSubmit(submitForm, event, closeButton){
 
 	event.preventDefault();
 	clearTheValidations();
 
+
+
 	if (!formIsInvalid(submitForm)) {
 		//make fetch post request
-		makePostRequest();
-		closeTheModal();
+		makePostRequest(submitForm);
+		closeTheModal(closeButton);
 
 		//clear the model form fields
 		submitForm.reset()
