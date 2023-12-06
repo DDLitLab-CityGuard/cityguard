@@ -13,117 +13,104 @@
   </head>
   <body>
 
-
     <div class="full-height" id="map" style="position:relative; z-index:1;">
       <button type="button" id="report_button" class="btn btn-danger" style="position:absolute;z-index:1000;bottom:0px;" data-bs-toggle="modal" data-bs-target="#form_modal">Report Event</button>
-
-
-
-
-  </div>
-  
-   <!-- Modal -->
-<div class="modal fade"  id="form_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true needs-validation" novalidate>
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Report Event</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="submit_form">
-      <div class="modal-body">
-            <div class="row">
-              <label for="location" class="form-label">Location</label>
-            <div class="col-7 mb-3">
-              <input type="text" class="form-control" id="location"  name="location" aria-describedby="locationHelp">
-              <input type="text" class="form-control" id="location_hidden" hidden name="location_hidden" aria-describedby="locationHelp">
-              <div class="invalid-feedback" id="location-feedback">
-              </div>
-              <div id="locationHelp" class="form-text">Enter the location or check the box</div>
-           
-            </div>
-            <div class="col-5 mb-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="currentLocation" value="" id="locationcheckbox" required>
-                <label class="form-check-label" for="locationcheckbox">
-                  Current Location
-                </label>
-              </div>
-            </div>
-
-           
-          </div>
-          
-          <div class="row">
-            <label class="form-label">Date & Time</label>
-          <div class="col-7 mb-3">
-            <div class="input-group" id="datetimegroup">
-              <input type="time" name="time" class="form-control" id="time" required>
-              
-              <input type="date" name="date" class="form-control" id="date" required>
-             
-            </div>        
-            <div class="invalid-feedback" id="datetime-feedback">
-              Please check the checkbox or type the date and time 
-            </div>
-            <div id="datetimehelp" class="form-text">Enter the date and time or check the box</div>
-         
-          </div>
-          <div class="col-5 mb-3">
-            <div class="form-check">
-              <input class="form-check-input" name="currentDateTime" type="checkbox" value="" id="datetimecheckbox" required>
-              <label class="form-check-label" for="datetimecheckbox">
-                Current Date & Time
-              </label>
-            </div>
-          </div>
-
-         
-        </div>
-
-        <div class="row">
-          <label  class="form-label">Category</label>
-          <div class="col-7 mb-3">
-            <select id="selectCategory" name="category" class="form-select" required>
-
-            </select>            
-            <div class="invalid-feedback">
-              Please enter a category.
-            </div>
-            <div id="categoryHelp" class="form-text">Select a Category</div>
-         
-          </div>
-        </div>
-          
-
-        <div class="row">
-          <label for="decs_textarea" class="form-label">Description</label>
-        <div class="col-12 mb-3">
-          <textarea class="form-control" name="desc" id="decs_textarea" rows="3"></textarea>
-          <div class="invalid-feedback" id="desc-feedback">
-            Description can not be longer than 255 chars.
-          </div>
-          <div id="descriptionHelp" class="form-text">Descripe what happend</div>
-       
-        </div>
-        
-       
-      </div>
-
-        
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
-
-        <input  id="submitevent"  type="submit"  class="btn btn-primary">
-      </div>
-    </form>
     </div>
-  </div>
-</div>
+  
+    <!-- Modal -->
+    <div class="modal fade"  id="form_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true needs-validation" novalidate>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Report Event</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="submit_form">
+            <div class="modal-body">
+              <div class="row">
+                <label for="location" class="form-label">Location</label>
+                <div class="col-7 mb-3">
+                  <input type="text" class="form-control" id="location"  name="location" aria-describedby="locationHelp">
+                  <input type="text" class="form-control" id="location_hidden" hidden name="location_hidden" aria-describedby="locationHelp">
+                  <div class="invalid-feedback" id="location-feedback"></div>
+                  <div id="locationHelp" class="form-text">Enter the location or check the box</div>
+                </div>
+                <div class="col-5 mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="currentLocation" value="" id="locationcheckbox" required>
+                    <label class="form-check-label" for="locationcheckbox">
+                      Current Location
+                    </label>
+                  </div>
+                </div>
+              </div>
 
+              <div class="row">
+                <label class="form-label">Date & Time</label>
+              <div class="col-7 mb-3">
+                <div class="input-group" id="datetimegroup">
+                  <input type="time" name="time" class="form-control" id="time" required>
+
+                  <input type="date" name="date" class="form-control" id="date" required>
+
+                </div>
+                <div class="invalid-feedback" id="datetime-feedback">
+                  Please check the checkbox or type the date and time
+                </div>
+                <div id="datetimehelp" class="form-text">Enter the date and time or check the box</div>
+
+                </div>
+                <div class="col-5 mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" name="currentDateTime" type="checkbox" value="" id="datetimecheckbox" required>
+                    <label class="form-check-label" for="datetimecheckbox">
+                      Current Date & Time
+                    </label>
+                  </div>
+                </div>
+
+
+              </div>
+
+              <div class="row">
+                <label  class="form-label">Category</label>
+                <div class="col-7 mb-3">
+                  <select id="selectCategory" name="category" class="form-select" required>
+
+                  </select>
+                  <div class="invalid-feedback">
+                    Please enter a category.
+                  </div>
+                  <div id="categoryHelp" class="form-text">Select a Category</div>
+
+                </div>
+              </div>
+
+
+              <div class="row">
+                <label for="decs_textarea" class="form-label">Description</label>
+              <div class="col-12 mb-3">
+                <textarea class="form-control" name="desc" id="decs_textarea" rows="3"></textarea>
+                <div class="invalid-feedback" id="desc-feedback">
+                  Description can not be longer than 255 chars.
+                </div>
+                <div id="descriptionHelp" class="form-text">Descripe what happend</div>
+
+              </div>
+
+
+            </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="closeModal" data-bs-dismiss="modal">Close</button>
+
+              <input  id="submitevent"  type="submit"  class="btn btn-primary">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -134,10 +121,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="/mapdisplay.js" type=text/javascript></script>
-    <script src="/submitevent.js" type=text/javascript defer></script>
-    <script src="/validation.js" type=text/javascript defer></script>
-    <script src="/category.js" type=text/javascript defer></script>
-    <script src="/getcurrentcord.js" type=text/javascript defer></script>
+    <script src="application.js" type="module" defer></script>
   </body>
 </html>

@@ -30,7 +30,7 @@
                         <format>
                             <includes>
                                 <include>**/*.java</include>
-                                <!-- <include>**/*.js</include> -->
+                                <include>**/*.js</include>
                             </includes>
                             <trimTrailingWhitespace/>
                             <endWithNewline/>
