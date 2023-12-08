@@ -25,10 +25,6 @@ import static java.lang.Float.parseFloat;
 @Setter
 @ToString
 public class ReportForm {
-
-	private float latitude;
-	private float longitude;
-
 	private float measured_latitude;
 	private float measured_longitude;
 
@@ -52,17 +48,6 @@ public class ReportForm {
 	@ManyToOne
 	private Long categoryId;
 
-	@JsonProperty("location")
-	private void splitCoordinates(String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{
-		try {
-			String[] latLongArray = coordinates.split(",");
-			this.latitude = parseFloat(latLongArray[0]);
-			this.longitude = parseFloat(latLongArray[1]);
-		}
-		catch (NullPointerException | NumberFormatException | PatternSyntaxException e){
-			throw new NumberFormatException("Die eingegeben Koordinaten sind nicht im richtigen Format");
-		}
-	}
 
 	@JsonProperty("location_hidden")
 	private void splitCoordinatesHidden(String coordinates) throws NullPointerException, NumberFormatException, PatternSyntaxException{

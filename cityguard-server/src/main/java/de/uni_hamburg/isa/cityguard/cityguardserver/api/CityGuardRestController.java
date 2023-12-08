@@ -150,13 +150,10 @@ public class CityGuardRestController {
 			return ResponseEntity.badRequest().body("Fehlerhafte Anfrage: Die angegebene Kategorie existiert nicht");
 		}
 		Report report = new Report();
-		if(reportForm.getUseCurrentLocation()){
-			report.setLatitude(reportForm.getMeasured_latitude());
-			report.setLongitude(reportForm.getMeasured_longitude());
-		}else{
-			report.setLatitude(reportForm.getLatitude());
-			report.setLongitude(reportForm.getLongitude());
-		}
+
+		report.setLatitude(reportForm.getMeasured_latitude());
+		report.setLongitude(reportForm.getMeasured_longitude());
+
 		report.setCategory(categoryRepository.findById(reportForm.getCategoryId()).orElseThrow());
 		report.setDescription(reportForm.getDescription());
 		LocalDateTime dateTime = LocalDateTime.now();

@@ -9,7 +9,6 @@
  * @type {string}
  */
 const apiEndpoint = `${document.location.protocol}//${document.location.hostname}:8088/api`
-const geoCoderApiEndpoint =" http://cityguard.isa.uni-hamburg.de:8089/search?q="
 
 /**
  * Fetches information about the existing Categories from the API.
@@ -20,16 +19,6 @@ export function fetchCategories(func){
 		.then(response => response.json())
 		.then(data => {
 			func(data)
-		});
-}
-export function fetchCoordinatesMatchingString(locationString,func) {
-	console.log(locationString)
-	fetch(geoCoderApiEndpoint + locationString)
-		.then(response => response.json())
-		.then(data => {
-			console.log(data)
-			func(data)
-
 		});
 }
 
@@ -77,6 +66,5 @@ export function submitReport(report){
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
 		});
-
 }
 

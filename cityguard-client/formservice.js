@@ -87,7 +87,8 @@ function removeCategoryOptions(select){
 function formIsInvalid(form){
 	let json= getTheFormData(form)
 	json=JSON.parse(json)
-	let locaval=validateLocation(json.location,json.currentLocation)
+	console.log(json)
+	let locaval=validateLocation(json.location_hidden,json.currentLocation)
 	let datetimeval=validateDateTime(json.date,json.time,json.currentDateTime)
 	let descval=validateDesc(json.desc)
 
