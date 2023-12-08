@@ -7,7 +7,6 @@ import {checkboxChanged, closeTheModal, fetchCategoriesAndRenderOptions, validat
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchCoordinatesFromInput} from "./geocodingservice.js";
 
-
 /**
  * Main function of the application. It is called when the DOM is loaded.
  * Hear we start the application by adding event listeners to the buttons and initializing the map.
@@ -26,7 +25,7 @@ function main() {
 	reportButton.addEventListener('click', fetchCategoriesAndRenderOptions);
 	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e, closeButton));
 	checkbox.addEventListener("change", () => checkboxChanged(checkbox, inputField, hiddenInputField));
-	locationinput.addEventListener('keyup', (e) => fetchCoordinatesFromInput(locationInput,e));
+	locationInput.addEventListener('keyup', (e) => fetchCoordinatesFromInput(locationInput,e));
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 19,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -37,3 +36,4 @@ function main() {
 }
 
 document.addEventListener('DOMContentLoaded', main);
+
