@@ -4,7 +4,7 @@
  * @module cityguard-api
  */
 
-import {apiEndpoint} from "../config";
+import {apiEndpoint} from "../config/config.js";
 
 /**
  * Fetches information about the existing Categories from the API.
