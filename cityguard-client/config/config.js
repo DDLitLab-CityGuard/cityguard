@@ -6,4 +6,4 @@
  * The Base URL of the CityGuard API.
  * @type {string}
  */
-export const apiEndpoint = `localhost:8088/api`
+export const apiEndpoint = `http://localhost:8088/api`
