@@ -4,7 +4,7 @@
  *
  * @module mapdisplayservice
  */
-import {fetchReports} from "./api/cityguard-api.js";
+import {fetchReports} from "./apiwrapper/cityguard-api.js";
 
 /**
  * This function collects the data from the api and renders it on the map by putting it into the heatmapGroup and markerGroup.
