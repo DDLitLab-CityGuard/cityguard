@@ -25,13 +25,5 @@ jobs:
         run: mvn --batch-mode -DskipTests package
 
       - name: Test
-        run: mvn --batch-mode --batch-mode -Dmaven.test.failure.ignore=true test
+        run: mvn --batch-mode --batch-mode  test
 
-      - name: Report
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Maven Tests
-          path: target/surefire-reports/*.xml
-          reporter: java-junit
-          fail-on-error: true
