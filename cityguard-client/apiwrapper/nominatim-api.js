@@ -13,10 +13,10 @@ const geoCoderApiEndpoint =" https://cityguard.isa.uni-hamburg.de/nominatim/sear
  * @param func
  */
 export function fetchCoordinatesMatchingString(locationString,func) {
-    fetch(geoCoderApiEndpoint + locationString)
-        .then(response => response.json())
-        .then(data => {
-            func(data)
+	fetch(geoCoderApiEndpoint + locationString)
+		.then(response => response.json())
+		.then(data => {
+			func(data)
 
-        });
+		});
 }
