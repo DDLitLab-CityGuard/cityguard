@@ -34,7 +34,7 @@ public class CategoryRepositoryTest {
 
         // Assert
         Assertions.assertThat(savedCategory1).isNotNull();
-        Assertions.assertThat(savedCategory1.getId()).isGreaterThan(0);
+        Assertions.assertThat(savedCategory1.getId()).isGreaterThan(100);
         Assertions.assertThat(savedCategory1.getName()).isEqualTo(category1.getName());
         Assertions.assertThat(savedCategory1.getAllowDiscrete()).isEqualTo(category1.getAllowDiscrete());
 
