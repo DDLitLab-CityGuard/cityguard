@@ -145,7 +145,7 @@ function validateDesc(desc){
 	return true;
 }
 
-function clearTheValidations(){
+export function clearTheValidations(){
 	let error= document.getElementById("location-feedback")
 	error.innerHTML=""
 	const elements = document.querySelectorAll('.is-invalid');
