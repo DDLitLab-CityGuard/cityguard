@@ -18,39 +18,39 @@ import java.time.LocalDateTime;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class ReportRepositoryTest {
 
-    @Autowired
-    private ReportRepository reportRepository;
+	@Autowired
+	private ReportRepository reportRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+	@Autowired
+	private CategoryRepository categoryRepository;
 
-    @Test
-    public void ReportRepository_SaveReport_ReturnsReport() {
-        // Arrange
-        Category category1 = new Category();
-        category1.setName("Test Category");
-        category1.setAllowDiscrete(true);
+	@Test
+	public void ReportRepository_SaveReport_ReturnsReport() {
+		// Arrange
+		Category category1 = new Category();
+		category1.setName("Test Category");
+		category1.setAllowDiscrete(true);
 
-        Report report1 = new Report();
-        report1.setCategory(category1);
-        report1.setDescription("Test Description");
-        report1.setLatitude(1.0f);
-        report1.setLongitude(1.0f);
-        LocalDateTime dateTime = LocalDateTime.now();
-        report1.setDateTime(dateTime);
+		Report report1 = new Report();
+		report1.setCategory(category1);
+		report1.setDescription("Test Description");
+		report1.setLatitude(1.0f);
+		report1.setLongitude(1.0f);
+		LocalDateTime dateTime = LocalDateTime.now();
+		report1.setDateTime(dateTime);
 
 
-        // Act
-        Category savedCategory1 = categoryRepository.save(category1);
-        Report savedReport1 = reportRepository.save(report1);
+		// Act
+		Category savedCategory1 = categoryRepository.save(category1);
+		Report savedReport1 = reportRepository.save(report1);
 
-        // Assert
-        Assertions.assertThat(savedReport1).isNotNull();
-        Assertions.assertThat(savedReport1.getId()).isGreaterThan(0);
-        Assertions.assertThat(savedReport1.getCategory()).isEqualTo(report1.getCategory());
-        Assertions.assertThat(savedReport1.getDescription()).isEqualTo(report1.getDescription());
-        Assertions.assertThat(savedReport1.getLatitude()).isEqualTo(report1.getLatitude());
-        Assertions.assertThat(savedReport1.getLongitude()).isEqualTo(report1.getLongitude());
-        Assertions.assertThat(savedReport1.getDateTime()).isEqualTo(dateTime);
-    }
+		// Assert
+		Assertions.assertThat(savedReport1).isNotNull();
+		Assertions.assertThat(savedReport1.getId()).isGreaterThan(0);
+		Assertions.assertThat(savedReport1.getCategory()).isEqualTo(report1.getCategory());
+		Assertions.assertThat(savedReport1.getDescription()).isEqualTo(report1.getDescription());
+		Assertions.assertThat(savedReport1.getLatitude()).isEqualTo(report1.getLatitude());
+		Assertions.assertThat(savedReport1.getLongitude()).isEqualTo(report1.getLongitude());
+		Assertions.assertThat(savedReport1.getDateTime()).isEqualTo(dateTime);
+	}
 }
