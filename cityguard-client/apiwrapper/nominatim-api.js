@@ -4,7 +4,10 @@
  * @module nominatim-api
  */
 
-const geoCoderApiEndpoint =" https://cityguard.isa.uni-hamburg.de/nominatim/search?q="
+//import {geoCoderApiEndpoint} from "../config/config.js";
+//import {geoCoderApiEndpointReverse} from "../config/config.js";
+let geoCoderApiEndpoint="https://cityguard.isa.uni-hamburg.de/nominatim/search?q="
+let geoCoderApiEndpointReverse="https://cityguard.isa.uni-hamburg.de/nominatim/reverse?format=json&"
 
 
 /**
@@ -18,5 +21,15 @@ export function fetchCoordinatesMatchingString(locationString,func) {
 		.then(data => {
 			func(data)
 
+		});
+}
+
+
+
+export function fetchNameFromCoordinates(coordinates, func) {
+	fetch(geoCoderApiEndpointReverse+"lat="+coordinates.latitude+"&lon="+coordinates.longitude)
+		.then(response => response.json())
+		.then(data => {
+			func(data)
 		});
 }

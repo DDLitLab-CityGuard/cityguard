@@ -6,6 +6,7 @@
  */
 import {submitReport, fetchCategories} from "./apiwrapper/cityguard-api.js";
 import {getCoordinates} from "./navigationservice.js";
+import {fetchNameFromCoordinates} from "./apiwrapper/nominatim-api.js";
 
 /**
  * This function is called when the user clicks on the "Report" button.
@@ -40,7 +41,8 @@ export function validationAndSubmit(submitForm, event, closeButton){
 		//make fetch post request
 		makePostRequest(submitForm);
 		closeTheModal(closeButton);
-
+		document.getElementById("location").disabled = false;
+		document.getElementById("location").classList.remove("text-muted");
 		//clear the model form fields
 		submitForm.reset()
 	}
@@ -60,7 +62,9 @@ export async function checkboxChanged(checkbox, inputField, hiddenInputField){
 		inputField.disabled = true;
 		inputField.classList.add("text-muted");
 		const coordinates = await getCoordinates();
-		inputField.value = `${coordinates.latitude},${coordinates.longitude}`;
+		fetchNameFromCoordinates(coordinates, function (data) {
+			inputField.value = data['display_name'];
+		});
 		hiddenInputField.value = `${coordinates.latitude},${coordinates.longitude}`;
 	} else {
 		inputField.disabled = false;
