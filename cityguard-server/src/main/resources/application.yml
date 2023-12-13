@@ -1,14 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/postgres
-    username: postgres
-    password: admin
+    url: jdbc:postgresql://localhost:5432/cityguard
+    username: admin
+    password: pass
   jpa:
     generate-ddl: true
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:data.sql
+
 server:
   port: 8088

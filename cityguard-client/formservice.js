@@ -4,7 +4,7 @@
  *  All those interactions are handled by the functions in this file.
  *  @module formservice
  */
-import {submitReport, fetchCategories} from "./api/cityguard-api.js";
+import {submitReport, fetchCategories} from "./apiwrapper/cityguard-api.js";
 import {getCoordinates} from "./navigationservice.js";
 
 /**

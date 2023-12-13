@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="2 Server" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="cityguard-server" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="de.uni_hamburg.isa.cityguard.cityguardserver.CityGuardServerApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
