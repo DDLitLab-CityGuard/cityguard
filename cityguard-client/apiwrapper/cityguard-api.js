@@ -4,11 +4,9 @@
  * @module cityguard-api
  */
 
-/**
- * The Base URL of the CityGuard API.
- * @type {string}
- */
-const apiEndpoint = `${document.location.protocol}//${document.location.hostname}:8088/api`
+
+import {apiEndpoint} from "../config/config.js";
+
 
 /**
  * Fetches information about the existing Categories from the API.
