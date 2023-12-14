@@ -5,7 +5,7 @@
  */
 import {checkboxChanged, closeTheModal, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
-import {fetchCoordinatesFromInput} from "./geocodingservice.js";
+import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";
 
 /**
  * Main function of the application. It is called when the DOM is loaded.
@@ -22,6 +22,7 @@ function main() {
 	let locationInput = document.getElementById('location');
 	let map = L.map('map').setView([53.566819239846915, 10.004717089957754], 13);
 
+	map.on('click', function(e) {fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField)});
 	reportButton.addEventListener('click', fetchCategoriesAndRenderOptions);
 	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e, closeButton));
 	checkbox.addEventListener("change", () => checkboxChanged(checkbox, inputField, hiddenInputField));

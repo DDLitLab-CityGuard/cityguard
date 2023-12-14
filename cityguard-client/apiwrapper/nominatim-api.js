@@ -26,8 +26,8 @@ export function fetchCoordinatesMatchingString(locationString,func) {
 
 
 
-export function fetchNameFromCoordinates(coordinates, func) {
-	fetch(geoCoderApiEndpointReverse+"lat="+coordinates.latitude+"&lon="+coordinates.longitude)
+export function fetchNameFromCoordinates(lat,lon, func) {
+	fetch(geoCoderApiEndpointReverse+"lat="+lat+"&lon="+lon)
 		.then(response => response.json())
 		.then(data => {
 			func(data)

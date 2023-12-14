@@ -62,7 +62,7 @@ export async function checkboxChanged(checkbox, inputField, hiddenInputField){
 		inputField.disabled = true;
 		inputField.classList.add("text-muted");
 		const coordinates = await getCoordinates();
-		fetchNameFromCoordinates(coordinates, function (data) {
+		fetchNameFromCoordinates(coordinates.latitude,coordinates.longitude, function (data) {
 			inputField.value = data['display_name'];
 		});
 		hiddenInputField.value = `${coordinates.latitude},${coordinates.longitude}`;
