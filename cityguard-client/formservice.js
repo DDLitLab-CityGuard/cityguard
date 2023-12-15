@@ -178,4 +178,3 @@ function makePostRequest(submitForm){
 	let data= getTheFormData(submitForm)
 	submitReport(data)
 }
-
