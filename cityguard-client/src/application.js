@@ -3,9 +3,26 @@
  * It contains the main function that is called when the DOM is loaded.
  * @module application
  */
-import {checkboxChanged, closeTheModal, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
+
+//css
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'leaflet/dist/leaflet.css';
+import 'jquery-ui/dist/themes/base/jquery-ui.css'
+import './main.css'
+
+//js
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import '@popperjs/core/dist/umd/popper.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import L from 'leaflet';
+
+
+//src modules
+import {checkboxChanged, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchCoordinatesFromInput} from "./geocodingservice.js";
+
+
 
 /**
  * Main function of the application. It is called when the DOM is loaded.
