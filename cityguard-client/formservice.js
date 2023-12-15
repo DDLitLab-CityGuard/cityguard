@@ -22,6 +22,7 @@ export function fetchCategoriesAndRenderOptions() {
 			opt.innerHTML = data[i].name;
 			select.appendChild(opt);}
 	});
+
 }
 
 /**
@@ -176,4 +177,13 @@ function makePostRequest(submitForm){
 	// Data to be sent in the POST request (can be a JSON object, FormData, etc.)
 	let data= getTheFormData(submitForm)
 	submitReport(data)
+}
+
+
+export function  clearlLocationandHiddenLocationField(){
+	let locationInput = document.getElementById('location');
+	let hiddenInputField = document.getElementById("location_hidden");
+	locationInput.value = ""
+	hiddenInputField.value = ""
+	console.log("field deleted")
 }
