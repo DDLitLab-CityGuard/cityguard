@@ -179,11 +179,3 @@ function makePostRequest(submitForm){
 	submitReport(data)
 }
 
-
-export function  clearlLocationandHiddenLocationField(){
-	let locationInput = document.getElementById('location');
-	let hiddenInputField = document.getElementById("location_hidden");
-	locationInput.value = ""
-	hiddenInputField.value = ""
-	console.log("field deleted")
-}
