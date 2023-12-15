@@ -27,6 +27,7 @@ export function fetchCoordinatesFromInput(inputField, e) {
 			showValidationError();
 		}
 		});
+
 	$(inputField).autocomplete({
 			delay: 400,
 			minLength: 2,
@@ -37,7 +38,6 @@ export function fetchCoordinatesFromInput(inputField, e) {
 			}
 			,select: function (event, ui) {
 				event.preventDefault();
-
 			},appendTo: "#submit_form"
 		});
 	$(inputField).on( "autocompleteselect", function( event, ui ) {
@@ -57,7 +57,6 @@ export function fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputFiel
 }
 
 function formatData(data) {
-	console.log(data)
 	let result = [];
 	for (let i = 0; i < data.length; i++) {
 		result.push({
