@@ -4,10 +4,8 @@
  * @module nominatim-api
  */
 
-//import {geoCoderApiEndpoint} from "../config/config.js";
-//import {geoCoderApiEndpointReverse} from "../config/config.js";
-let geoCoderApiEndpoint="https://cityguard.isa.uni-hamburg.de/nominatim/search?q="
-let geoCoderApiEndpointReverse="https://cityguard.isa.uni-hamburg.de/nominatim/reverse?format=json&"
+import {geoCoderApiEndpoint} from "../config/config.js";
+import {geoCoderApiEndpointReverse} from "../config/config.js";
 
 
 /**
