@@ -7,7 +7,6 @@
 //css
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'leaflet/dist/leaflet.css';
-import 'jquery-ui/dist/themes/base/jquery-ui.css'
 import './main.css'
 
 //js
