@@ -5,7 +5,7 @@
  */
 
 
-import {apiEndpoint} from "../config/config.js";
+import {apiEndpoint} from "../../config/config.js";
 
 
 /**

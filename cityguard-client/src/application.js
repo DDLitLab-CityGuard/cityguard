@@ -3,9 +3,25 @@
  * It contains the main function that is called when the DOM is loaded.
  * @module application
  */
+
+//css
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'leaflet/dist/leaflet.css';
+import './main.css'
+
+//js
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import '@popperjs/core/dist/umd/popper.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import L from 'leaflet';
+
+
+//src modules
 import {checkboxChanged, fetchCategoriesAndRenderOptions, validationAndSubmit,clearForm} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";
+
+
 
 /**
  * Main function of the application. It is called when the DOM is loaded.
