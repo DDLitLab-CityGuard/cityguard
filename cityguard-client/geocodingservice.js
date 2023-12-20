@@ -1,6 +1,7 @@
 
 import {fetchCoordinatesMatchingString} from "./apiwrapper/nominatim-api.js";
 import {clearTheValidations, fetchCategoriesAndRenderOptions} from "./formservice.js";
+
 import {fetchNameFromCoordinates} from "./apiwrapper/nominatim-api.js";
 
 
@@ -48,7 +49,6 @@ export function fetchCoordinatesFromInput(inputField, e) {
 }
 
 export function fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField){
-	console.log("fetchClickCoordinatesAndOpenForm");
 	hiddenInputField.value = e.latlng.lat+","+e.latlng.lng;
 	fetchNameFromCoordinates(e.latlng.lat, e.latlng.lng, (data) => {
 		locationInput.value = data.display_name;
