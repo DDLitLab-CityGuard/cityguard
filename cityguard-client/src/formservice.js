@@ -178,3 +178,17 @@ function makePostRequest(submitForm){
 	let data= getTheFormData(submitForm)
 	submitReport(data)
 }
+
+
+/**
+
+ * This function is responsible for clearing the form and enables the location input field and unmutes the text.
+ *
+ * @param submitForm
+ * @param inputField
+ */
+export function clearForm(submitForm,inputField){
+	submitForm.reset();
+	inputField.disabled = false;
+	inputField.classList.remove("text-muted");
+}
