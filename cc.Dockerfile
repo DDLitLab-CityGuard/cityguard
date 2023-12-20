@@ -1,4 +1,13 @@
+FROM node:18-alpine3.17 as build
+LABEL CONFIG_LOCATION=/cityguard-client/config/config.js
+COPY cityguard-client /cityguard-client
+
+WORKDIR /cityguard-client
+
+RUN npm install
+RUN npm run build
+
 FROM nginx:latest
-LABEL CONFIG_LOCATION=/usr/share/nginx/html/config/config.js
-COPY cityguard-client /usr/share/nginx/html
+COPY --from=build /cityguard-client/dist /usr/share/nginx/html
 EXPOSE 80
+CMD ["nginx","-g","daemon off;"]
