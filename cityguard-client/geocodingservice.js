@@ -1,6 +1,7 @@
 
 import {fetchCoordinatesMatchingString} from "./apiwrapper/nominatim-api.js";
-import {clearTheValidations} from "./formservice.js";
+import {clearTheValidations, fetchCategoriesAndRenderOptions} from "./formservice.js";
+
 import {fetchNameFromCoordinates} from "./apiwrapper/nominatim-api.js";
 
 
@@ -53,6 +54,7 @@ export function fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputFiel
 		locationInput.value = data.display_name;
 	});
 	$('#form_modal').modal('show');
+	fetchCategoriesAndRenderOptions();
 
 }
 

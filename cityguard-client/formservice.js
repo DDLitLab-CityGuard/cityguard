@@ -22,6 +22,7 @@ export function fetchCategoriesAndRenderOptions() {
 			opt.innerHTML = data[i].name;
 			select.appendChild(opt);}
 	});
+
 }
 
 /**
