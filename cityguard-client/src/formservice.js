@@ -6,6 +6,7 @@
  */
 import {submitReport, fetchCategories} from "./apiwrapper/cityguard-api.js";
 import {getCoordinates} from "./navigationservice.js";
+import {fetchNameFromCoordinates} from "./apiwrapper/nominatim-api.js";
 
 /**
  * This function is called when the user clicks on the "Report" button.
@@ -21,6 +22,7 @@ export function fetchCategoriesAndRenderOptions() {
 			opt.innerHTML = data[i].name;
 			select.appendChild(opt);}
 	});
+
 }
 
 /**
@@ -40,7 +42,8 @@ export function validationAndSubmit(submitForm, event, closeButton){
 		//make fetch post request
 		makePostRequest(submitForm);
 		closeTheModal(closeButton);
-
+		document.getElementById("location").disabled = false;
+		document.getElementById("location").classList.remove("text-muted");
 		//clear the model form fields
 		submitForm.reset()
 	}
@@ -60,7 +63,9 @@ export async function checkboxChanged(checkbox, inputField, hiddenInputField){
 		inputField.disabled = true;
 		inputField.classList.add("text-muted");
 		const coordinates = await getCoordinates();
-		inputField.value = `${coordinates.latitude},${coordinates.longitude}`;
+		fetchNameFromCoordinates(coordinates.latitude,coordinates.longitude, function (data) {
+			inputField.value = data['display_name'];
+		});
 		hiddenInputField.value = `${coordinates.latitude},${coordinates.longitude}`;
 	} else {
 		inputField.disabled = false;
@@ -145,7 +150,7 @@ function validateDesc(desc){
 	return true;
 }
 
-function clearTheValidations(){
+export function clearTheValidations(){
 	let error= document.getElementById("location-feedback")
 	error.innerHTML=""
 	const elements = document.querySelectorAll('.is-invalid');
@@ -172,4 +177,18 @@ function makePostRequest(submitForm){
 	// Data to be sent in the POST request (can be a JSON object, FormData, etc.)
 	let data= getTheFormData(submitForm)
 	submitReport(data)
+}
+
+
+/**
+
+ * This function is responsible for clearing the form and enables the location input field and unmutes the text.
+ *
+ * @param submitForm
+ * @param inputField
+ */
+export function clearForm(submitForm,inputField){
+	submitForm.reset();
+	inputField.disabled = false;
+	inputField.classList.remove("text-muted");
 }
