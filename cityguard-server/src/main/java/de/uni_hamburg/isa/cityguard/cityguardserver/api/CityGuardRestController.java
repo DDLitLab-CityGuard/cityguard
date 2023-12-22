@@ -71,14 +71,16 @@ public class CityGuardRestController {
 		}
 
 		ReportVisualization reportVisualization = new ReportVisualization();
-		//List<HeatmapCell> heatmap = spatialIndexingService.calculateHeatmap(heatmapReports, 9);
-		List<HeatmapCell> heatmap = spatialIndexingService.calculateAllCells(
-				9,
+		int resolution = (int) Math.min(9, 9);
+		List<HeatmapCell> heatmap = spatialIndexingService.calculateHeatmap(heatmapReports, resolution);
+		List<HeatmapCell> heatmap2 = spatialIndexingService.calculateAllCells(
+				resolution,
 				new LatLon(latitudeUpper, longitudeLeft),
 				new LatLon(latitudeUpper, longitudeRight),
 				new LatLon(latitudeLower, longitudeRight),
 				new LatLon(latitudeLower, longitudeLeft)
 		);
+		heatmap.addAll(heatmap2);
 		reportVisualization.setHeatmap(heatmap);
 		reportVisualization.setMarkers(markerReports);
 
