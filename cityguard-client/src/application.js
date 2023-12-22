@@ -16,18 +16,34 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import L from 'leaflet';
 
 
-//src modules
-import {checkboxChanged, fetchCategoriesAndRenderOptions, validationAndSubmit,clearForm} from "./formservice.js";
+import {checkboxChanged, clearForm, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";
-
-
+import { icon, Marker } from 'leaflet';
 
 /**
  * Main function of the application. It is called when the DOM is loaded.
  * Hear we start the application by adding event listeners to the buttons and initializing the map.
  */
 function main() {
+
+
+
+	const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
+	const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
+	const shadowUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
+	Marker.prototype.options.icon = icon({
+		iconRetinaUrl,
+		iconUrl,
+		shadowUrl,
+		iconSize: [25, 41],
+		iconAnchor: [12, 41],
+		popupAnchor: [1, -34],
+		tooltipAnchor: [16, -28],
+		shadowSize: [41, 41]
+	});
+
+
 	let reportButton = document.getElementById('report_button');
 	let submitButton = document.getElementById('submitevent');
 	let closeButton = document.getElementById('closeModal');

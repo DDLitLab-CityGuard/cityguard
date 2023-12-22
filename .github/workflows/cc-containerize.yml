@@ -43,7 +43,8 @@ jobs:
         with:
           context: ./
           file: ./cc.Dockerfile
-          build-args: CG_API_URL="https://cityguard.isa.uni-hamburg.de/api"
+          build-args: |
+            CG_API_URL=https://cityguard.isa.uni-hamburg.de/api
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
