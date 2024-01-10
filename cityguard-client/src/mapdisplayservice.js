@@ -5,6 +5,7 @@
  * @module mapdisplayservice
  */
 import {fetchReports} from "./apiwrapper/cityguard-api.js";
+import {addEventListenerToMarkers} from "./sidebarservice.js";
 
 /**
  * This function collects the data from the api and renders it on the map by putting it into the heatmapGroup and markerGroup.
@@ -22,9 +23,8 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 		(data) => {
 			heatmapGroup.clearLayers();
 			markerGroup.clearLayers();
-			for (let i = 0; i < data.markers.length; i++) {
-				L.marker([data.markers[i].latitude, data.markers[i].longitude]).addTo(markerGroup);
-			}
+			let markers=createMarkers(data, markerGroup);
+			addEventListenerToMarkers(markers);
 			for(let i = 0; i < data.heatmap.length; i++){
 				const x = data.heatmap[i].latitude;
 				const y = data.heatmap[i].longitude;
@@ -40,4 +40,16 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 			}
 		}
 	)
+}
+
+
+function createMarkers(data, markerGroup){
+	let markers=[];
+	for (let i = 0; i < data.markers.length; i++) {
+	let current= data.markers[i];
+	let marker= L.marker([current.latitude, current.longitude]).addTo(markerGroup);
+	marker.customID=current.id
+	markers.push(marker);
+	}
+	return markers;
 }

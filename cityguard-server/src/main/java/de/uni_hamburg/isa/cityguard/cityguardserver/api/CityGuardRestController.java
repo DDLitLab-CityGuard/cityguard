@@ -2,6 +2,7 @@ package de.uni_hamburg.isa.cityguard.cityguardserver.api;
 
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportForm;
+import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportInformation;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportVisualization;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
@@ -176,4 +177,25 @@ public class CityGuardRestController {
 	public List<Category> fetchCategories(){
 		return categoryRepository.findAll();
 	}
+
+	/**
+	 * This endpoint fetches a single report from the database.
+	 * It is used to display a report in the detail view.
+	 * @param id The id of the report to fetch
+	 * @return A JSON object containing the report
+	 */
+	@CrossOrigin(origins = "*")
+	@GetMapping(value = "/fetch_single_event_info",produces = "application/json")
+	public ReportInformation fetchSingleReportInformation(@RequestParam Long customID) {
+		ReportInformation reportInformation = new ReportInformation();
+		Report report = reportRepository.findById(customID).orElseThrow();
+		//reportInformation.setCategory(report.getCategory());
+		reportInformation.setDescription(report.getDescription());
+		//reportInformation.setDateTime(report.getDateTime());
+		return reportInformation;
 }
+}
+
+
+
+// Path: cityguard-server/src/main/java/de/uni_hamburg/isa/cityguard/cityguardserver/database/CategoryRepository.java
