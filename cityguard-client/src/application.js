@@ -46,9 +46,7 @@ function main() {
 		shadowSize: [41, 41]
 	});
 
-	fetchCategories((data) => {
-		displayMapFilterButton(data);
-	});
+
 
 	let reportButton = document.getElementById('report_button');
 	let submitButton = document.getElementById('submitevent');
@@ -73,6 +71,12 @@ function main() {
 	let markergroup = L.layerGroup().addTo(map);
 	let heatmapgroup = L.layerGroup().addTo(map);
 	map.on('moveend', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
+
+	fetchCategories((data) => {
+		displayMapFilterButton(data, map, heatmapgroup, markergroup);
+	});
+
+	fetchAndRenderReports(map, heatmapgroup, markergroup);
 }
 
 document.addEventListener('DOMContentLoaded', main);

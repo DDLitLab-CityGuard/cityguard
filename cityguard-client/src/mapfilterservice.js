@@ -1,4 +1,6 @@
-export function displayMapFilterButton(filter_list) {
+import {fetchAndRenderReports} from "./mapdisplayservice.js";
+
+export function displayMapFilterButton(filter_list, map, heatmapGroup, markerGroup) {
     let filter_bar = document.createElement("div");
     filter_bar.setAttribute("style", "position: absolute; top: 10px; right: 10px; z-index: 1000; display: flex; flex-direction: row;")
 
@@ -14,6 +16,10 @@ export function displayMapFilterButton(filter_list) {
         checkbox_input.setAttribute("type", "checkbox");
         checkbox_input.setAttribute("value", "");
         checkbox_input.setAttribute("id", "category-filter-" + filter_list[i].id);
+        checkbox_input.checked = true;
+        checkbox_input.addEventListener("change", function () {
+            fetchAndRenderReports(map, heatmapGroup, markerGroup)
+        });
         checkbox.appendChild(checkbox_input);
 
         let checkbox_label = document.createElement("label");

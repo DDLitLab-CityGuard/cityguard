@@ -14,6 +14,7 @@ import {fetchReports} from "./apiwrapper/cityguard-api.js";
  * @param markerGroup
  */
 export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
+
 	fetchReports(
 		map.getBounds().getSouthWest().lat - 0.01,
 		map.getBounds().getNorthEast().lat + 0.01,
@@ -23,6 +24,11 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 			heatmapGroup.clearLayers();
 			markerGroup.clearLayers();
 			for (let i = 0; i < data.markers.length; i++) {
+				let category_id = data.markers[i].category.id;
+				let filter = document.getElementById("category-filter-" + category_id).checked;
+				if (!filter) {
+					continue;
+				}
 				L.marker([data.markers[i].latitude, data.markers[i].longitude]).addTo(markerGroup);
 			}
 			for(let i = 0; i < data.heatmap.length; i++){
