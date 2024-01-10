@@ -1,5 +1,6 @@
 package de.uni_hamburg.isa.cityguard.cityguardserver.api;
 
+import com.uber.h3core.util.LatLng;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.LatLon;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportForm;
@@ -10,6 +11,7 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class CityGuardRestController {
 
 	private final ReportRepository reportRepository;
@@ -57,6 +60,8 @@ public class CityGuardRestController {
 			@RequestParam Float longitudeRight
 	) {
 
+
+
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper);
 		List<Report> markerReports = new ArrayList<>(selectedReports.size());
 		List<Report> heatmapReports = new ArrayList<>(selectedReports.size());
@@ -70,8 +75,8 @@ public class CityGuardRestController {
 			}
 		}
 
+		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
 		ReportVisualization reportVisualization = new ReportVisualization();
-		int resolution = (int) Math.min(9, 9);
 		List<HeatmapCell> heatmap = spatialIndexingService.calculateHeatmap(heatmapReports, resolution);
 		List<HeatmapCell> heatmap2 = spatialIndexingService.calculateAllCells(
 				resolution,
