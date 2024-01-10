@@ -19,7 +19,10 @@ import L from 'leaflet';
 import {checkboxChanged, clearForm, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";
+import {displayMapFilterButton} from "./mapfilterservice.js";
 import { icon, Marker } from 'leaflet';
+import {fetchCategories} from "./apiwrapper/cityguard-api.js";
+
 
 /**
  * Main function of the application. It is called when the DOM is loaded.
@@ -43,6 +46,9 @@ function main() {
 		shadowSize: [41, 41]
 	});
 
+	fetchCategories((data) => {
+		displayMapFilterButton(data);
+	});
 
 	let reportButton = document.getElementById('report_button');
 	let submitButton = document.getElementById('submitevent');
