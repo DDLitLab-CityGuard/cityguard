@@ -14,22 +14,22 @@ import java.util.List;
 public class SpatialIndexingServiceTest {
 
 
-    @Test
-    public void h3Test() {
-        try {
-            H3Core h3 = H3Core.newInstance();
-            double lat = 37.775938728915946;
-            double lng = -122.41795063018799;
-            int res = 9;
+	@Test
+	public void h3Test() {
+		try {
+			H3Core h3 = H3Core.newInstance();
+			double lat = 37.775938728915946;
+			double lng = -122.41795063018799;
+			int res = 9;
 
-            String hexAddr = h3.latLngToCellAddress(lat, lng, res);
-            log.info("hexAddr: {}", hexAddr);
-            List<LatLng> LatLngs = h3.cellToBoundary(hexAddr);
-            log.info("LatLngs: {}", LatLngs);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+			String hexAddr = h3.latLngToCellAddress(lat, lng, res);
+			log.info("hexAddr: {}", hexAddr);
+			List<LatLng> LatLngs = h3.cellToBoundary(hexAddr);
+			log.info("LatLngs: {}", LatLngs);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
 
-    }
+	}
 }
