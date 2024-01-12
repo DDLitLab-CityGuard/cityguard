@@ -22,6 +22,7 @@ import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geo
 import {displayMapFilterButton} from "./mapfilterservice.js";
 import { icon, Marker } from 'leaflet';
 import {fetchCategories} from "./apiwrapper/cityguard-api.js";
+import {getCoordinates} from "./navigationservice.js";
 
 
 /**
@@ -56,7 +57,15 @@ function main() {
 	let hiddenInputField = document.getElementById("location_hidden");
 	let submitForm = document.getElementById('submit_form');
 	let locationInput = document.getElementById('location');
-	let map = L.map('map').setView([53.566819239846915, 10.004717089957754], 13);
+	let map = L.map('map', {
+		maxBounds: [ [-90, -180], [90, 180] ],
+		minZoom: 3,
+	})
+
+	const currentPosition = getCoordinates();
+	currentPosition.then((data) => {
+		map.setView([data.latitude, data.longitude], 20);
+	});
 
 	map.on('click', function(e) {clearForm(submitForm,inputField);fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField)});
 	reportButton.addEventListener('click', (e) =>{fetchCategoriesAndRenderOptions();clearForm(submitForm,inputField);e.stopPropagation();});
