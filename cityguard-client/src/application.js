@@ -65,6 +65,7 @@ function main() {
 	}).addTo(map);
 	let markergroup = L.layerGroup().addTo(map);
 	let heatmapgroup = L.layerGroup().addTo(map);
+	map.on('movestart', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
 	map.on('moveend', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
 }
 

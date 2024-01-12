@@ -31,17 +31,12 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 			let markers=createMarkers(data, markerGroup);
 			addEventListenerToMarkers(markers);
 			for(let i = 0; i < data.heatmap.length; i++){
-				const x = data.heatmap[i].latitude;
-				const y = data.heatmap[i].longitude;
-				const sizeLat = data.heatmap[i].sizeLat;
-				const sizeLon = data.heatmap[i].sizeLon;
-				const latLongs = [
-					[x, y],
-					[x + (sizeLat), y],
-					[x + (sizeLat), y + sizeLon],
-					[x, y + sizeLon],
-				];
-				L.polygon(latLongs, {color: '#ff0000', weight: 0, fillOpacity: data.heatmap[i].value}).addTo(heatmapGroup);
+				const polygon = data.heatmap[i].polygon;
+				const value = data.heatmap[i].value;
+				const latLongs = polygon.map((point) => [point.latitude, point.longitude])
+
+
+				L.polygon(latLongs, {color: 'black', weight: 0.1, fillOpacity: value, fillColor: 'red'}).addTo(heatmapGroup);
 			}
 		}
 	)
