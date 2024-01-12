@@ -62,11 +62,6 @@ function main() {
 		minZoom: 5,
 	}).setView([51.505, -0.09], 13)
 
-	const currentPosition = getCoordinates();
-	currentPosition.then((data) => {
-		map.setView([data.latitude, data.longitude], 20);
-	});
-
 	map.on('click', function(e) {clearForm(submitForm,inputField);fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField)});
 	reportButton.addEventListener('click', (e) =>{fetchCategoriesAndRenderOptions();clearForm(submitForm,inputField);e.stopPropagation();});
 
