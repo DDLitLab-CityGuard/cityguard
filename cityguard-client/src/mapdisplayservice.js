@@ -48,7 +48,7 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 					const latLongs = polygon.map((point) => [point.latitude, point.longitude])
 					L.polygon(latLongs, {color: 'black', weight: 0.1, fillOpacity: value, fillColor: 'red'}).addTo(heatmapGroup);
 				}
-      }
+	}
 		}
 	)
 }
@@ -83,12 +83,10 @@ function createMarkers(data, markerGroup){
 	});
 	let markers=[];
 	for (let i = 0; i < data.markers.length; i++) {
-    let current= data.markers[i];
-    let marker= L.marker([current.latitude, current.longitude],{icon:markerTypes[current.categoryType]}).addTo(markerGroup);
-    marker.customID=current.id
-    markers.push(marker);
+	let current= data.markers[i];
+	let marker= L.marker([current.latitude, current.longitude],{icon:markerTypes[current.categoryType]}).addTo(markerGroup);
+	marker.customID=current.id
+	markers.push(marker);
 	}
 	return markers;
 }
-
-

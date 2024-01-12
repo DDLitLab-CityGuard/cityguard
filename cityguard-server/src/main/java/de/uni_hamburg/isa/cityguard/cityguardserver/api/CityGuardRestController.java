@@ -64,12 +64,12 @@ public class CityGuardRestController {
 
 		for (Report report : selectedReports) {
 			if (report.getCategory().getAllowDiscrete()){
-				 MarkerVisualisation markerVisualisation = new MarkerVisualisation();
-				 markerVisualisation.setId(report.getId());
-				 markerVisualisation.setLatitude(report.getLatitude());
-				 markerVisualisation.setLongitude(report.getLongitude());
-				 markerVisualisation.setCategoryType(report.getCategory().getMarkerType());
-				 markerReports.add(markerVisualisation);
+				MarkerVisualisation markerVisualisation = new MarkerVisualisation();
+				markerVisualisation.setId(report.getId());
+				markerVisualisation.setLatitude(report.getLatitude());
+				markerVisualisation.setLongitude(report.getLongitude());
+				markerVisualisation.setCategoryType(report.getCategory().getMarkerType());
+				markerReports.add(markerVisualisation);
 			}
 		}
 
@@ -162,6 +162,3 @@ public class CityGuardRestController {
 		return reportInformation;
 }
 }
-
-
-
