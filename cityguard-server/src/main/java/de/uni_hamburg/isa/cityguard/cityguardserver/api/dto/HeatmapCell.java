@@ -3,6 +3,8 @@ package de.uni_hamburg.isa.cityguard.cityguardserver.api.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 /**
  * This class is used to serialize the data for the visualization of the reports
@@ -13,9 +15,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class HeatmapCell {
-	private float latitude;
-	private float longitude;
-	private float sizeLat;
-	private float sizeLon;
+	private List<LatLon> polygon;
 	private float value;
 }

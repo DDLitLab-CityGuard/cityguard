@@ -1,21 +1,23 @@
 package de.uni_hamburg.isa.cityguard.cityguardserver.api;
 
+import com.uber.h3core.util.LatLng;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
+import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.LatLon;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportForm;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportVisualization;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
+import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * REST Controller for the CityGuard App.
@@ -26,15 +28,19 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class CityGuardRestController {
 
 	private final ReportRepository reportRepository;
 	private final CategoryRepository categoryRepository;
 
+	private final SpatialIndexingService spatialIndexingService;
 
-	public CityGuardRestController(ReportRepository reportRepository, CategoryRepository categoryRepository) {
+
+	public CityGuardRestController(ReportRepository reportRepository, CategoryRepository categoryRepository, SpatialIndexingService spatialIndexingService) {
 		this.reportRepository = reportRepository;
 		this.categoryRepository = categoryRepository;
+		this.spatialIndexingService = spatialIndexingService;
 	}
 
 	/**
@@ -54,83 +60,38 @@ public class CityGuardRestController {
 			@RequestParam Float longitudeRight
 	) {
 
-		Map<Float, Map<Float, Float>> counter = new HashMap<>();
+
+
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper);
-		List<Report> markerReports = new ArrayList<>();
-		float size = 0.25f; //grid size in kilometers
+		List<Report> markerReports = new ArrayList<>(selectedReports.size());
+		List<Report> heatmapReports = new ArrayList<>(selectedReports.size());
+
 
 		for (Report report : selectedReports) {
-
 			if (report.getCategory().getAllowDiscrete()){
 				markerReports.add(report);
-				continue;
+			}else{
+				heatmapReports.add(report);
 			}
-
-			float[] clippedCords = clipToKilometers(report.getLatitude(), report.getLongitude(), size, latitudeUpper);
-			increaseTileValue(counter, clippedCords[0], clippedCords[1], 1f);
-
-			increaseTileValue(counter, clippedCords[0] - (size/111), clippedCords[1], 0.4f);
-			increaseTileValue(counter, clippedCords[0] + (size/111), clippedCords[1], 0.4f);
-
-			increaseTileValue(counter, clippedCords[0], clippedCords[1] + (size/lonKmAtLatitude(latitudeUpper)), 0.4f);
-			increaseTileValue(counter, clippedCords[0], clippedCords[1] - (size/lonKmAtLatitude(latitudeUpper)), 0.4f);
 		}
 
+		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
 		ReportVisualization reportVisualization = new ReportVisualization();
-		List<HeatmapCell> heatmap = new ArrayList<>();
-
-		for(float lat : counter.keySet()){
-			for(float lon : counter.get(lat).keySet()){
-				HeatmapCell heatmapCell = new HeatmapCell();
-				heatmapCell.setLatitude(lat);
-				heatmapCell.setLongitude(lon);
-				heatmapCell.setSizeLat(size/111f);
-				heatmapCell.setSizeLon(size/lonKmAtLatitude(latitudeUpper));
-				heatmapCell.setValue(Math.min(counter.get(lat).get(lon) * 0.2f, 0.6f));
-				heatmap.add(heatmapCell);
-			}
-		}
-
+		List<HeatmapCell> heatmap = spatialIndexingService.calculateHeatmap(heatmapReports, resolution);
+		List<HeatmapCell> heatmap2 = spatialIndexingService.calculateAllCells(
+				resolution,
+				new LatLon(latitudeUpper, longitudeLeft),
+				new LatLon(latitudeUpper, longitudeRight),
+				new LatLon(latitudeLower, longitudeRight),
+				new LatLon(latitudeLower, longitudeLeft)
+		);
+		heatmap.addAll(heatmap2);
 		reportVisualization.setHeatmap(heatmap);
 		reportVisualization.setMarkers(markerReports);
 
 		return reportVisualization;
 	}
 
-	/*
-	 * This helper method increases the value of a tile in the heatmap during the calculation of the heatmap.
-	 */
-	private void increaseTileValue(Map<Float, Map<Float, Float>> counter, float lat, float lon, float value){
-		if(counter.containsKey(lat)) {
-			if(counter.get(lat).containsKey(lon)) {
-				counter.get(lat).put(lon, counter.get(lat).get(lon) + value);
-			} else {
-				counter.get(lat).put(lon, value);
-			}
-		} else {
-			Map<Float, Float> newMap = new HashMap<>();
-			newMap.put(lon, value);
-			counter.put(lat, newMap);
-		}
-	}
-
-	/*
-	 * This helper method calculates the length of a degree of longitude at a given latitude.
-	 */
-	private float lonKmAtLatitude(float latitude) {
-		float stabilizedLat = (float) (Math.floor(latitude * 10f) / 10f);
-		return (float) (Math.cos(Math.toRadians(stabilizedLat)) * 111.32);
-	}
-
-	/*
-	 * This helper method clips a coordinate to a given grid size.
-	 * That means that the coordinate is rounded to the next multiple of the grid size.
-	 */
-	private float[] clipToKilometers(float lat, float lon, float kilometers, float referenceLatitude){
-		float clippedLat = (float) (Math.floor(lat * (111f / kilometers)) / (111f / kilometers));
-		float clippedLon = (float) (Math.floor(lon * (lonKmAtLatitude(referenceLatitude) / kilometers)) / (lonKmAtLatitude(referenceLatitude) / kilometers));
-		return new float[]{clippedLat, clippedLon};
-	}
 
 	/**
 	 * This endpoint submits a report to the server.
