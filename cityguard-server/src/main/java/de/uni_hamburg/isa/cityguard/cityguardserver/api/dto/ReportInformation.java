@@ -7,10 +7,10 @@ import lombok.Setter;
 @Setter
 public class ReportInformation {
 
-    private String title;
-    private String category;
-    private String description;
-    private String date;
-    private String time;
-    private String categoryType;
+	private String title;
+	private String category;
+	private String description;
+	private String date;
+	private String time;
+	private String categoryType;
 }

@@ -34,12 +34,14 @@ public interface ReportRepository extends JpaRepository<Report,Long> {
 			"SELECT r FROM Report r "
 			+ "WHERE ( (:minlo < :maxlo AND r.longitude > :minlo AND r.longitude < :maxlo) OR (:minlo > :maxlo AND (r.longitude > :minlo OR r.longitude < :maxlo)) ) "
 			+ "AND (r.latitude > :minlat AND r.latitude < :maxlat)"
+			+ "AND (r.category.id IN :categories)"
 	)
 	List<Report> findBetweenBounds(
 			@Param("minlo") Float minLongitude,
 			@Param("maxlo") Float maxLongitude,
 			@Param("minlat") Float minLatitude,
-			@Param("maxlat") Float maxLatitude
+			@Param("maxlat") Float maxLatitude,
+			@Param("categories") List<Long> categories
 	);
 
 }

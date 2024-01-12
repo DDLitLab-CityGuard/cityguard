@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MarkerVisualisation{
-    private Long id;
-    private Float longitude;
-    private Float latitude;
-    private String categoryType;
+	private Long id;
+	private Float longitude;
+	private Float latitude;
+	private String categoryType;
 }
