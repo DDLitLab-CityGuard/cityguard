@@ -5,6 +5,12 @@
  * @module mapdisplayservice
  */
 import {fetchReports} from "./apiwrapper/cityguard-api.js";
+import {addEventListenerToMarkers} from "./sidebarservice.js";
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
+import AwesomeMarkers from "leaflet";
+
+
 
 /**
  * This function collects the data from the api and renders it on the map by putting it into the heatmapGroup and markerGroup.
@@ -22,9 +28,8 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 		(data) => {
 			heatmapGroup.clearLayers();
 			markerGroup.clearLayers();
-			for (let i = 0; i < data.markers.length; i++) {
-				L.marker([data.markers[i].latitude, data.markers[i].longitude]).addTo(markerGroup);
-			}
+			let markers=createMarkers(data, markerGroup);
+			addEventListenerToMarkers(markers);
 			for(let i = 0; i < data.heatmap.length; i++){
 				const polygon = data.heatmap[i].polygon;
 				const value = data.heatmap[i].value;
@@ -36,3 +41,43 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 		}
 	)
 }
+
+
+function createMarkers(data, markerGroup){
+	console.log(data)
+	let markerTypes={}
+	markerTypes["redMarker"]=L.AwesomeMarkers.icon({
+		icon: 'gun',
+		prefix:'fa',
+		markerColor: 'red',
+		iconColor: 'white',
+	});
+	markerTypes["blueMarker"]=L.AwesomeMarkers.icon({
+		icon: 'home',
+		prefix:'fa',
+		markerColor: 'blue',
+		iconColor: 'white',
+	});
+	markerTypes["greenMarker"]=L.AwesomeMarkers.icon({
+		icon: 'trash',
+		prefix:'fa',
+		markerColor: 'green',
+		iconColor: 'white',
+	});
+	markerTypes["purpleMarker"]=L.AwesomeMarkers.icon({
+		icon: 'fire',
+		prefix:'fa',
+		markerColor: 'purple',
+		iconColor: 'white',
+	});
+	let markers=[];
+	for (let i = 0; i < data.markers.length; i++) {
+	let current= data.markers[i];
+	let marker= L.marker([current.latitude, current.longitude],{icon:markerTypes[current.categoryType]}).addTo(markerGroup);
+	marker.customID=current.id
+	markers.push(marker);
+	}
+	return markers;
+}
+
+
