@@ -7,6 +7,7 @@
 
 import {apiEndpoint} from "../../config/config.js";
 
+export let last_known_categories = [];
 
 /**
  * Fetches information about the existing Categories from the API.
@@ -16,6 +17,7 @@ export function fetchCategories(func){
 	fetch(`${apiEndpoint}/fetch_categories`)
 		.then(response => response.json())
 		.then(data => {
+			last_known_categories = data;
 			func(data)
 		});
 }
@@ -28,15 +30,17 @@ export function fetchCategories(func){
  * @param latitudeUpper
  * @param longitudeLeft
  * @param longitudeRight
+ * @param categories
  * @param func
  */
-export function fetchReports(latitudeLower, latitudeUpper, longitudeLeft, longitudeRight, func){
+export function fetchReports(latitudeLower, latitudeUpper, longitudeLeft, longitudeRight, categories, func){
 	fetch(`${apiEndpoint}/fetch_reports?` + new URLSearchParams(
 		{
 			latitudeLower: latitudeLower,
 			latitudeUpper: latitudeUpper,
 			longitudeLeft: longitudeLeft,
-			longitudeRight: longitudeRight
+			longitudeRight: longitudeRight,
+			categories: categories
 		}
 	))
 		.then(response => response.json())

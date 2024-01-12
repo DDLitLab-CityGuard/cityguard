@@ -44,7 +44,7 @@ public class CityGuardRestController {
 	}
 
 	/**
-	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports (the other reports st.
+	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports.
 	 * @param latitudeUpper The upper latitude of the area
 	 * @param latitudeLower The lower latitude of the area
 	 * @param longitudeLeft The left longitude of the area
@@ -57,9 +57,10 @@ public class CityGuardRestController {
 			@RequestParam Float latitudeUpper,
 			@RequestParam Float latitudeLower,
 			@RequestParam Float longitudeLeft,
-			@RequestParam Float longitudeRight
+			@RequestParam Float longitudeRight,
+			@RequestParam List<Long> categories
 	) {
-		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper);
+		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
 		List<Report> markerReports = new ArrayList<>(selectedReports.size());
 		List<Report> heatmapReports = new ArrayList<>(selectedReports.size());
 
@@ -74,6 +75,7 @@ public class CityGuardRestController {
 		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
 		ReportVisualization reportVisualization = new ReportVisualization();
 		List<HeatmapCell> heatmap = spatialIndexingService.calculateHeatmap(heatmapReports, resolution);
+
 		List<HeatmapCell> heatmap2 = spatialIndexingService.calculateAllCells(
 				resolution,
 				new LatLon(latitudeUpper, longitudeLeft),

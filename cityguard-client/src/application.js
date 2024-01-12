@@ -60,7 +60,7 @@ function main() {
 	let map = L.map('map', {
 		maxBounds: [ [-40, -80], [80, 80] ],
 		minZoom: 5,
-	}).setView([51.505, -0.09], 13)
+	}).setView([53.550, 10.00], 13)
 
 	map.on('click', function(e) {clearForm(submitForm,inputField);fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField)});
 	reportButton.addEventListener('click', (e) =>{fetchCategoriesAndRenderOptions();clearForm(submitForm,inputField);e.stopPropagation();});
@@ -79,9 +79,10 @@ function main() {
 
 	fetchCategories((data) => {
 		displayMapFilterButton(data, map, heatmapgroup, markergroup);
+		fetchAndRenderReports(map, heatmapgroup, markergroup);
 	});
 
-	fetchAndRenderReports(map, heatmapgroup, markergroup);
+
 }
 
 document.addEventListener('DOMContentLoaded', main);
