@@ -60,7 +60,7 @@ export function displayMapFilterButton(filter_list, map, heatmapGroup, markerGro
 function generateHeatmapFilter(filter_list, map, heatmapGroup, markerGroup){
 	let style = `
 		margin-top: 10px;
-		width: 140px;
+		width: 150px;
 		background-color: white;
 		padding: 7px;
 		border-radius: 3px;
@@ -102,7 +102,7 @@ function generateHeatmapFilter(filter_list, map, heatmapGroup, markerGroup){
 
 function generateMarkerFilter(filter_list, map, heatmapGroup, markerGroup){
 	let style = `
-		width: 140px;
+		width: 150px;
 		background-color: white;
 		padding: 7px;
 		border-radius: 3px;
