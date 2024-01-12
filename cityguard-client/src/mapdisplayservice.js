@@ -6,7 +6,7 @@
  */
 import {fetchReports} from "./apiwrapper/cityguard-api.js";
 import {last_known_categories} from "./apiwrapper/cityguard-api.js";
-import {display_heatmap} from "./mapfilterservice.js";
+import {display_heatmap, current_heatmap_category} from "./mapfilterservice.js";
 
 /**
  * This function collects the data from the api and renders it on the map by putting it into the heatmapGroup and markerGroup.
@@ -30,6 +30,7 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 		map.getBounds().getSouthWest().lng -0.01,
 		map.getBounds().getNorthEast().lng + 0.01,
 		filter_list,
+		current_heatmap_category,
 		(data) => {
 			heatmapGroup.clearLayers();
 			markerGroup.clearLayers();

@@ -58,19 +58,19 @@ public class CityGuardRestController {
 			@RequestParam Float latitudeLower,
 			@RequestParam Float longitudeLeft,
 			@RequestParam Float longitudeRight,
-			@RequestParam List<Long> categories
+			@RequestParam List<Long> categories,
+			@RequestParam Long heatmapCategory
 	) {
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
 		List<Report> markerReports = new ArrayList<>(selectedReports.size());
-		List<Report> heatmapReports = new ArrayList<>(selectedReports.size());
 
 		for (Report report : selectedReports) {
 			if (report.getCategory().getAllowDiscrete()){
 				markerReports.add(report);
-			}else{
-				heatmapReports.add(report);
 			}
 		}
+
+		List<Report> heatmapReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, List.of(heatmapCategory));
 
 		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
 		ReportVisualization reportVisualization = new ReportVisualization();

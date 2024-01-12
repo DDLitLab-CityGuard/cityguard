@@ -1,6 +1,7 @@
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 
 export let display_heatmap = false;
+export let current_heatmap_category = Number.MAX_SAFE_INTEGER;
 
 export function displayMapFilterButton(filter_list, map, heatmapGroup, markerGroup) {
     const marker_filter = filter_list.filter(filter => filter.allowDiscrete);
@@ -24,6 +25,11 @@ export function displayMapFilterButton(filter_list, map, heatmapGroup, markerGro
     let heatmapToggle = document.getElementById("heatmapToggle");
     heatmapToggle.addEventListener("change", function(){
         display_heatmap = heatmapToggle.checked;
+        for(let i = 0; i < filter_list.length; i++){
+            let filter_id = filter_list[i].id;
+            let filter = document.getElementById("heatmapFilter-" + filter_id);
+            filter.disabled = !display_heatmap;
+        }
         fetchAndRenderReports(map, heatmapGroup, markerGroup);
     });
 
@@ -33,6 +39,20 @@ export function displayMapFilterButton(filter_list, map, heatmapGroup, markerGro
         filter.addEventListener("change", function(){
             fetchAndRenderReports(map, heatmapGroup, markerGroup);
         });
+    }
+
+    for(let i = 0; i < filter_list.length; i++){
+        let filter_id = filter_list[i].id;
+        let filter = document.getElementById("heatmapFilter-" + filter_id);
+        filter.disabled = true;
+        filter.addEventListener("change", function(){
+            current_heatmap_category = filter_id;
+            fetchAndRenderReports(map, heatmapGroup, markerGroup);
+        });
+    }
+    if(filter_list.length > 0){
+        current_heatmap_category = filter_list[0].id;
+        document.getElementById("heatmapFilter-" + current_heatmap_category).checked = true;
     }
 }
 

@@ -31,16 +31,18 @@ export function fetchCategories(func){
  * @param longitudeLeft
  * @param longitudeRight
  * @param categories
+ * @param heatmapCategory
  * @param func
  */
-export function fetchReports(latitudeLower, latitudeUpper, longitudeLeft, longitudeRight, categories, func){
+export function fetchReports(latitudeLower, latitudeUpper, longitudeLeft, longitudeRight, categories, heatmapCategory, func){
 	fetch(`${apiEndpoint}/fetch_reports?` + new URLSearchParams(
 		{
 			latitudeLower: latitudeLower,
 			latitudeUpper: latitudeUpper,
 			longitudeLeft: longitudeLeft,
 			longitudeRight: longitudeRight,
-			categories: categories
+			categories: categories,
+			heatmapCategory: heatmapCategory
 		}
 	))
 		.then(response => response.json())
