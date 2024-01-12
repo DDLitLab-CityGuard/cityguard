@@ -58,9 +58,9 @@ function main() {
 	let submitForm = document.getElementById('submit_form');
 	let locationInput = document.getElementById('location');
 	let map = L.map('map', {
-		maxBounds: [ [-90, -180], [90, 180] ],
-		minZoom: 3,
-	})
+		maxBounds: [ [-40, -80], [80, 80] ],
+		minZoom: 5,
+	}).setView([51.505, -0.09], 13)
 
 	const currentPosition = getCoordinates();
 	currentPosition.then((data) => {
@@ -79,6 +79,7 @@ function main() {
 	}).addTo(map);
 	let markergroup = L.layerGroup().addTo(map);
 	let heatmapgroup = L.layerGroup().addTo(map);
+	map.on('movestart', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
 	map.on('moveend', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
 
 	fetchCategories((data) => {
