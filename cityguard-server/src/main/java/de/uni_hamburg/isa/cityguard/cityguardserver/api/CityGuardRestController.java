@@ -1,10 +1,7 @@
 package de.uni_hamburg.isa.cityguard.cityguardserver.api;
 
 import com.uber.h3core.util.LatLng;
-import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
-import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.LatLon;
-import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportForm;
-import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.ReportVisualization;
+import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.*;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
@@ -62,11 +59,17 @@ public class CityGuardRestController {
 			@RequestParam Long heatmapCategory
 	) {
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
-		List<Report> markerReports = new ArrayList<>(selectedReports.size());
+		List<MarkerVisualisation> markerReports = new ArrayList<>();
+
 
 		for (Report report : selectedReports) {
 			if (report.getCategory().getAllowDiscrete()){
-				markerReports.add(report);
+				 MarkerVisualisation markerVisualisation = new MarkerVisualisation();
+				 markerVisualisation.setId(report.getId());
+				 markerVisualisation.setLatitude(report.getLatitude());
+				 markerVisualisation.setLongitude(report.getLongitude());
+				 markerVisualisation.setCategoryType(report.getCategory().getMarkerType());
+				 markerReports.add(markerVisualisation);
 			}
 		}
 
@@ -135,4 +138,30 @@ public class CityGuardRestController {
 	public List<Category> fetchCategories(){
 		return categoryRepository.findAll();
 	}
+
+	/**
+	 * This endpoint fetches a single report from the database.
+	 * It is used to display a report in the detail view.
+	 * @param customID The id of the report to fetch
+	 * @return A JSON object containing the report
+	 */
+	@CrossOrigin(origins = "*")
+	@GetMapping(value = "/fetch_single_event_info",produces = "application/json")
+	public ReportInformation fetchSingleReportInformation(@RequestParam Long customID) {
+		ReportInformation reportInformation = new ReportInformation();
+		Report report = reportRepository.findById(customID).orElseThrow();
+		reportInformation.setCategory(report.getCategory().getName());
+		reportInformation.setDescription(report.getDescription());
+		LocalDateTime dateTime = report.getDateTime();
+		String date = dateTime.getDayOfMonth() + "." + dateTime.getMonthValue() + "." + dateTime.getYear();
+		String time = dateTime.getHour() + ":" + dateTime.getMinute();
+		reportInformation.setDate(date);
+		reportInformation.setTime(time);
+		reportInformation.setCategoryType(report.getCategory().getMarkerType());
+		reportInformation.setTitle("Report #" + report.getId());
+		return reportInformation;
 }
+}
+
+
+

@@ -8,11 +8,33 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
     <title>City Guard</title>
   </head>
   <body>
 
+
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offCanvasForInfo" aria-labelledby="offcanvasScrollingLabel">
+    <div class="offcanvas-header">
+      <h2 class="offcanvas-title" id="offcanvasScrollingLabel">Colored with scrolling</h2>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <h4 id="sidebar-category"></h4>
+      <div class="row">
+      <small  class="col-3" id="sidebar-date"></small>
+      <small class="col-3" id="sidebar-time"></small>
+      </div>
+      <div id="sidebar-desc"></div>
+    </div>
+  </div>
+
+
+
     <div class="full-height" id="map" style="position:relative; z-index:1;">
+
+
       <button type="button" id="report_button" class="btn btn-danger btn-circle mx-4 my-5" style="position:absolute;z-index:1000;bottom:0;right: 0" data-bs-toggle="modal" data-bs-target="#form_modal"><i class="fa-solid fa-plus fa-2xl"></i></button>
     </div>
   
@@ -115,9 +137,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
-    <!-- Entry point for the application -->
+
+
+  <!-- Entry point for the application -->
     <script src="./src/application.js" type="module" defer></script>
   </body>
 </html>
-
-

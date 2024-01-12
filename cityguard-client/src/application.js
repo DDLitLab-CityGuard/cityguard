@@ -15,7 +15,6 @@ import '@popperjs/core/dist/umd/popper.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import L from 'leaflet';
 
-
 import {checkboxChanged, clearForm, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";

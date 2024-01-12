@@ -71,3 +71,16 @@ export function submitReport(report){
 			}
 		});
 }
+
+
+export function fetchSingleEventInfo(customID,func){
+	fetch(`${apiEndpoint}/fetch_single_event_info?` + new URLSearchParams(
+		{
+			customID: customID
+		}
+	))
+		.then(response => response.json())
+		.then(data => {
+			func(data);
+		});
+}
