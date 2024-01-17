@@ -55,37 +55,21 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 
 
 function createMarkers(data, markerGroup){
-	let markerTypes={}
-	markerTypes["redMarker"]=L.AwesomeMarkers.icon({
-		icon: 'gun',
-		prefix:'fa',
-		markerColor: 'red',
-		iconColor: 'white',
-	});
-	markerTypes["blueMarker"]=L.AwesomeMarkers.icon({
-		icon: 'home',
-		prefix:'fa',
-		markerColor: 'blue',
-		iconColor: 'white',
-	});
-	markerTypes["greenMarker"]=L.AwesomeMarkers.icon({
-		icon: 'trash',
-		prefix:'fa',
-		markerColor: 'green',
-		iconColor: 'white',
-	});
-	markerTypes["purpleMarker"]=L.AwesomeMarkers.icon({
-		icon: 'fire',
-		prefix:'fa',
-		markerColor: 'purple',
-		iconColor: 'white',
-	});
 	let markers=[];
 	for (let i = 0; i < data.markers.length; i++) {
 	let current= data.markers[i];
-	let marker= L.marker([current.latitude, current.longitude],{icon:markerTypes[current.categoryType]}).addTo(markerGroup);
+	let marker= L.marker([current.latitude, current.longitude],{icon:createMarkerType(current.categoryIcon,current.categoryColor)}).addTo(markerGroup);
 	marker.customID=current.id
 	markers.push(marker);
 	}
 	return markers;
+}
+
+function createMarkerType(icon,color) {
+	return new L.AwesomeMarkers.icon({
+		icon: icon,
+		prefix: 'fa',
+		markerColor: color,
+		iconColor: 'white',
+	});
 }

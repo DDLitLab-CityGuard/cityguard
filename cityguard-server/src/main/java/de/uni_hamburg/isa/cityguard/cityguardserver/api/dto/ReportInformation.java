@@ -12,5 +12,6 @@ public class ReportInformation {
 	private String description;
 	private String date;
 	private String time;
-	private String categoryType;
+	private String categoryIcon;
+	private String categoryColor;
 }
