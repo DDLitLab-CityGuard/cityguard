@@ -216,6 +216,3 @@ function initDateTimeDisplay(){
 	date_display.disabled = true;
 	date_time_checkbox.checked = true;
 }
-
-
-
