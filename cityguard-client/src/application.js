@@ -14,14 +14,15 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '@popperjs/core/dist/umd/popper.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import L from 'leaflet';
+import './smoothzoom.js';
 
-import {checkboxChanged, clearForm, fetchCategoriesAndRenderOptions, validationAndSubmit} from "./formservice.js";
+import {checkboxChanged, clearForm, fetchCategoriesAndRenderOptions, validationAndSubmit, dateCheckboxChanged} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";
 import {displayMapFilterButton} from "./mapfilterservice.js";
 import { icon, Marker } from 'leaflet';
 import {fetchCategories} from "./apiwrapper/cityguard-api.js";
-import {getCoordinates} from "./navigationservice.js";
+import {renderUserLocation, triggerNavigationUpdate} from "./navigationservice.js";
 
 
 /**
@@ -30,7 +31,7 @@ import {getCoordinates} from "./navigationservice.js";
  */
 function main() {
 
-
+	triggerNavigationUpdate();
 
 	const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
 	const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
@@ -47,7 +48,7 @@ function main() {
 	});
 
 
-
+	const dateTimeCheckbox = document.getElementById("datetimecheckbox");
 	let reportButton = document.getElementById('report_button');
 	let submitButton = document.getElementById('submitevent');
 	let closeButton = document.getElementById('closeModal');
@@ -57,13 +58,16 @@ function main() {
 	let submitForm = document.getElementById('submit_form');
 	let locationInput = document.getElementById('location');
 	let map = L.map('map', {
+		scrollWheelZoom: false, // disable original zoom function
+		smoothWheelZoom: true,  // enable smooth zoom
+		smoothSensitivity: 2,
 		maxBounds: [ [-40, -80], [80, 80] ],
 		minZoom: 5,
 	}).setView([53.550, 10.00], 13)
 
 	map.on('click', function(e) {clearForm(submitForm,inputField);fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField)});
 	reportButton.addEventListener('click', (e) =>{fetchCategoriesAndRenderOptions();clearForm(submitForm,inputField);e.stopPropagation();});
-
+	dateTimeCheckbox.addEventListener('change', () => dateCheckboxChanged());
 	submitButton.addEventListener('click', (e) => validationAndSubmit(submitForm, e, closeButton));
 	checkbox.addEventListener("change", () => checkboxChanged(checkbox, inputField, hiddenInputField));
 	locationInput.addEventListener('keyup', (e) => fetchCoordinatesFromInput(locationInput,e));
@@ -73,8 +77,10 @@ function main() {
 	}).addTo(map);
 	let markergroup = L.layerGroup().addTo(map);
 	let heatmapgroup = L.layerGroup().addTo(map);
+	let userLocationLayer = L.layerGroup().addTo(map);
 	map.on('movestart', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
 	map.on('moveend', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
+	document.addEventListener('NavigationUpdate', (e) => renderUserLocation(e, map, userLocationLayer));
 
 	fetchCategories((data) => {
 		displayMapFilterButton(data, map, heatmapgroup, markergroup);
