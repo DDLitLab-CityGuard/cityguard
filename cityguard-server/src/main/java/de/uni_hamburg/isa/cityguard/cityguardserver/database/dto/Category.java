@@ -21,6 +21,7 @@ public class Category {
 	private Long id;
 	private String name;
 	private Boolean allowDiscrete;
-	private String	markerType;
+	private String	color;
+	private String icon;
 
 }
