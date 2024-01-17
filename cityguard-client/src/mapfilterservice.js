@@ -115,7 +115,7 @@ function generateMarkerFilter(filter_list, map, heatmapGroup, markerGroup){
 		let id = filter_list[i].id;
 		radio_buttons += `
 		<div class="form-check">
-			<input class="form-check-input" type="checkbox" name="flexRadioDefault" id="markerFilter-`+ id +`">
+			<input class="form-check-input" type="checkbox" name="flexRadioDefault" id="markerFilter-`+ id +`" checked>
 			<label class="form-check-label" for="markerFilter-`+ id +`">
 				`+ filter_name +`
 			</label>

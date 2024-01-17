@@ -4,24 +4,34 @@
  * @module navigationservice
  */
 
-/**
- * This function returns the current coordinates of the user in latitude and longitude.
- * When the user did not agree to share his location yet, he will be asked to do so.
- * If the browser does not support geolocation, or if the website is not on https this will not work.
- *
- * @returns {null|Promise<unknown>}
- */
-export function getCoordinates() {
-	if (navigator.geolocation) {
-		return new Promise((resolve) => {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				const latitude = position.coords.latitude;
-				const longitude = position.coords.longitude;
-				resolve({ latitude, longitude });
-			});
+
+export function startNavigation() {
+	if ("geolocation" in navigator) {
+		navigator.geolocation.watchPosition(function(position) {
+			const latitude = position.coords.latitude;
+			const longitude = position.coords.longitude;
+			localStorage.setItem("lastCoordinates", JSON.stringify({latitude: latitude, longitude: longitude}));
+			document.dispatchEvent(new CustomEvent("userLocationChanged", {detail: {latitude: latitude, longitude: longitude}}));
 		});
 	} else {
-		alert("Geolokalisierung wird in diesem Browser nicht unterstützt.");
-		return null;
+		console.log("Geolocation wird in diesem Browser nicht unterstützt.");
+	}
+}
+
+export function renderUserLocation(e, map, userLocationLayer) {
+	const latitude = e.detail.latitude;
+	const longitude = e.detail.longitude;
+	if (latitude && longitude) {
+
+		userLocationLayer.clearLayers();
+		const options = {
+			color: '#a2aeff',
+			radius: 5,
+			weight: 2,
+			fillColor: 'blue',
+			fillOpacity: 1
+		}
+		L.circle([latitude, longitude], {radius: 50, weight: 0}).addTo(userLocationLayer);
+		L.circleMarker([latitude, longitude], options).addTo(userLocationLayer);
 	}
 }
