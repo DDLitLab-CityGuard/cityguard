@@ -4,7 +4,7 @@
  *  All those interactions are handled by the functions in this file.
  *  @module formservice
  */
-import {submitReport, fetchCategories} from "./apiwrapper/cityguard-api.js";
+import {fetchCategories, submitReport} from "./apiwrapper/cityguard-api.js";
 import {getCoordinates} from "./navigationservice.js";
 import {fetchNameFromCoordinates} from "./apiwrapper/nominatim-api.js";
 
@@ -23,6 +23,7 @@ export function fetchCategoriesAndRenderOptions() {
 			select.appendChild(opt);}
 	});
 
+	initDateTimeDisplay()
 }
 
 /**
@@ -79,6 +80,30 @@ export async function checkboxChanged(checkbox, inputField, hiddenInputField){
  */
 export function closeTheModal(closeButton){
 	closeButton.click()
+}
+
+/**
+ * This function is responsible for clearing the form and enables the location input field and unmutes the text.
+ *
+ * @param submitForm
+ * @param inputField
+ */
+export function clearForm(submitForm,inputField){
+	submitForm.reset();
+	inputField.disabled = false;
+	inputField.classList.remove("text-muted");
+}
+
+export function dateCheckboxChanged(){
+	const checkbox = document.getElementById("datetimecheckbox");
+	const date_display = document.getElementById("date")
+	const time_display = document.getElementById("time")
+	if (checkbox.checked) {
+		initDateTimeDisplay()
+	} else {
+		date_display.disabled = false;
+		time_display.disabled = false;
+	}
 }
 
 function removeCategoryOptions(select){
@@ -179,16 +204,18 @@ function makePostRequest(submitForm){
 	submitReport(data)
 }
 
-
-/**
-
- * This function is responsible for clearing the form and enables the location input field and unmutes the text.
- *
- * @param submitForm
- * @param inputField
- */
-export function clearForm(submitForm,inputField){
-	submitForm.reset();
-	inputField.disabled = false;
-	inputField.classList.remove("text-muted");
+function initDateTimeDisplay(){
+	const date_time_checkbox = document.getElementById("datetimecheckbox");
+	const time_display = document.getElementById("time")
+	const date_display = document.getElementById("date")
+	const current_date_time = new Date();
+	const current_date = current_date_time.toISOString().slice(0,10);
+	time_display.value = current_date_time.toTimeString().slice(0, 5);
+	date_display.value = current_date;
+	time_display.disabled = true;
+	date_display.disabled = true;
+	date_time_checkbox.checked = true;
 }
+
+
+

@@ -55,7 +55,6 @@ export function fetchAndRenderReports(map, heatmapGroup, markerGroup){
 
 
 function createMarkers(data, markerGroup){
-	console.log(data)
 	let markerTypes={}
 	markerTypes["redMarker"]=L.AwesomeMarkers.icon({
 		icon: 'gun',
