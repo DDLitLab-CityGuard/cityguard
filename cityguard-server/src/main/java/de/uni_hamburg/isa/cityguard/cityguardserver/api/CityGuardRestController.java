@@ -59,19 +59,7 @@ public class CityGuardRestController {
 			@RequestParam Long heatmapCategory
 	) {
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
-		List<MarkerVisualisation> markerReports = new ArrayList<>();
-
-
-		for (Report report : selectedReports) {
-			if (report.getCategory().getAllowDiscrete()){
-				MarkerVisualisation markerVisualisation = new MarkerVisualisation();
-				markerVisualisation.setId(report.getId());
-				markerVisualisation.setLatitude(report.getLatitude());
-				markerVisualisation.setLongitude(report.getLongitude());
-				markerVisualisation.setCategoryType(report.getCategory().getMarkerType());
-				markerReports.add(markerVisualisation);
-			}
-		}
+		List<MarkerVisualisation> markerReports = getMarkerVisualisations(selectedReports);
 
 		List<Report> heatmapReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, List.of(heatmapCategory));
 
@@ -91,6 +79,24 @@ public class CityGuardRestController {
 		reportVisualization.setMarkers(markerReports);
 
 		return reportVisualization;
+	}
+
+	private static List<MarkerVisualisation> getMarkerVisualisations(List<Report> selectedReports) {
+		List<MarkerVisualisation> markerReports = new ArrayList<>();
+
+
+		for (Report report : selectedReports) {
+			if (report.getCategory().getAllowDiscrete()){
+				MarkerVisualisation markerVisualisation = new MarkerVisualisation();
+				markerVisualisation.setId(report.getId());
+				markerVisualisation.setLatitude(report.getLatitude());
+				markerVisualisation.setLongitude(report.getLongitude());
+				markerVisualisation.setCategoryColor(report.getCategory().getColor());
+				markerVisualisation.setCategoryIcon(report.getCategory().getIcon());
+				markerReports.add(markerVisualisation);
+			}
+		}
+		return markerReports;
 	}
 
 
@@ -157,7 +163,8 @@ public class CityGuardRestController {
 		String time = dateTime.getHour() + ":" + dateTime.getMinute();
 		reportInformation.setDate(date);
 		reportInformation.setTime(time);
-		reportInformation.setCategoryType(report.getCategory().getMarkerType());
+		reportInformation.setCategoryColor(report.getCategory().getColor());
+		reportInformation.setCategoryIcon(report.getCategory().getIcon());
 		reportInformation.setTitle("Report #" + report.getId());
 		return reportInformation;
 }
