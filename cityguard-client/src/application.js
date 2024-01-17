@@ -22,7 +22,7 @@ import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geo
 import {displayMapFilterButton} from "./mapfilterservice.js";
 import { icon, Marker } from 'leaflet';
 import {fetchCategories} from "./apiwrapper/cityguard-api.js";
-import {renderUserLocation, triggerNavigationUpdate} from "./navigationservice.js";
+import {renderUserLocation, startNavigation} from "./navigationservice.js";
 
 
 /**
@@ -31,7 +31,7 @@ import {renderUserLocation, triggerNavigationUpdate} from "./navigationservice.j
  */
 function main() {
 
-	triggerNavigationUpdate();
+	startNavigation();
 
 	const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
 	const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
@@ -60,10 +60,16 @@ function main() {
 	let map = L.map('map', {
 		scrollWheelZoom: false, // disable original zoom function
 		smoothWheelZoom: true,  // enable smooth zoom
-		smoothSensitivity: 2,
+		smoothSensitivity: 3,
 		maxBounds: [ [-40, -80], [80, 80] ],
 		minZoom: 5,
-	}).setView([53.550, 10.00], 13)
+	})
+	if(localStorage.getItem("lastCoordinates")){
+		let lastCoordinates = JSON.parse(localStorage.getItem("lastCoordinates"));
+		map.setView([lastCoordinates.latitude, lastCoordinates.longitude], 18);
+	}else {
+		map.setView([53.550, 10.00], 13)
+	}
 
 	map.on('click', function(e) {clearForm(submitForm,inputField);fetchClickCoordinatesAndOpenForm(e,locationInput,hiddenInputField)});
 	reportButton.addEventListener('click', (e) =>{fetchCategoriesAndRenderOptions();clearForm(submitForm,inputField);e.stopPropagation();});
@@ -80,7 +86,12 @@ function main() {
 	let userLocationLayer = L.layerGroup().addTo(map);
 	map.on('movestart', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
 	map.on('moveend', () => fetchAndRenderReports(map, heatmapgroup, markergroup));
+	document.addEventListener('ReportSubmitted', () => setTimeout(() => fetchAndRenderReports(map, heatmapgroup, markergroup), 200));
 	document.addEventListener('NavigationUpdate', (e) => renderUserLocation(e, map, userLocationLayer));
+	if(localStorage.getItem("lastCoordinates")){
+		let lastCoordinates = JSON.parse(localStorage.getItem("lastCoordinates"));
+		renderUserLocation({detail: lastCoordinates}, map, userLocationLayer)
+	}
 
 	fetchCategories((data) => {
 		displayMapFilterButton(data, map, heatmapgroup, markergroup);

@@ -5,7 +5,6 @@
  *  @module formservice
  */
 import {fetchCategories, submitReport} from "./apiwrapper/cityguard-api.js";
-import {getCoordinates} from "./navigationservice.js";
 import {fetchNameFromCoordinates} from "./apiwrapper/nominatim-api.js";
 
 /**
@@ -47,6 +46,7 @@ export function validationAndSubmit(submitForm, event, closeButton){
 		document.getElementById("location").classList.remove("text-muted");
 		//clear the model form fields
 		submitForm.reset()
+		document.dispatchEvent(new CustomEvent("ReportSubmitted"));
 	}
 }
 
@@ -63,7 +63,7 @@ export async function checkboxChanged(checkbox, inputField, hiddenInputField){
 	if (checkbox.checked) {
 		inputField.disabled = true;
 		inputField.classList.add("text-muted");
-		const coordinates = await getCoordinates();
+		const coordinates = JSON.parse(localStorage.getItem("lastCoordinates"));
 		fetchNameFromCoordinates(coordinates.latitude,coordinates.longitude, function (data) {
 			inputField.value = data['display_name'];
 		});
