@@ -9,5 +9,7 @@ CREATE TABLE report
     CONSTRAINT pk_report PRIMARY KEY (id)
 );
 
+
 ALTER TABLE report
     ADD CONSTRAINT FK_REPORT_ON_CATEGORY FOREIGN KEY (category_id) REFERENCES category (id);
+

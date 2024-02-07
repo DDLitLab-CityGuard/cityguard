@@ -25,4 +25,5 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
 	 */
 	@NonNull
 	Optional<Category> findById(@NonNull Long id);
+	//TODO warum steht hier optional??
 }

@@ -8,9 +8,7 @@ import {fetchReports} from "./apiwrapper/cityguard-api.js";
 import {last_known_categories} from "./apiwrapper/cityguard-api.js";
 import {display_heatmap, current_heatmap_category} from "./mapfilterservice.js";
 import {addEventListenerToMarkers} from "./sidebarservice.js";
-import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
-import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
-import AwesomeMarkers from "leaflet";
+
 
 
 /**

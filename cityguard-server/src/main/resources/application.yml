@@ -5,6 +5,8 @@ spring:
     password: pass
   jpa:
     generate-ddl: true
-
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
 server:
   port: 8088
