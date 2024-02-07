@@ -7,4 +7,3 @@ CREATE TABLE category
     icon    VARCHAR(255),
     CONSTRAINT pk_category PRIMARY KEY (id)
 );
-

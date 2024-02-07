@@ -4,23 +4,13 @@
  * @module application
  */
 
-//css
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'leaflet/dist/leaflet.css';
-import './main.css'
 
-//js
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import '@popperjs/core/dist/umd/popper.min.js'
-import 'bootstrap/dist/js/bootstrap.min.js'
-import L from 'leaflet';
 import './smoothzoom.js';
 
 import {checkboxChanged, clearForm, fetchCategoriesAndRenderOptions, validationAndSubmit, dateCheckboxChanged} from "./formservice.js";
 import {fetchAndRenderReports} from "./mapdisplayservice.js";
 import {fetchClickCoordinatesAndOpenForm, fetchCoordinatesFromInput} from "./geocodingservice.js";
 import {displayMapFilterButton} from "./mapfilterservice.js";
-import { icon, Marker } from 'leaflet';
 import {fetchCategories} from "./apiwrapper/cityguard-api.js";
 import {renderUserLocation, startNavigation} from "./navigationservice.js";
 
@@ -33,19 +23,6 @@ function main() {
 
 	startNavigation();
 
-	const iconRetinaUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
-	const iconUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png';
-	const shadowUrl = 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png';
-	Marker.prototype.options.icon = icon({
-		iconRetinaUrl,
-		iconUrl,
-		shadowUrl,
-		iconSize: [25, 41],
-		iconAnchor: [12, 41],
-		popupAnchor: [1, -34],
-		tooltipAnchor: [16, -28],
-		shadowSize: [41, 41]
-	});
 
 
 	const dateTimeCheckbox = document.getElementById("datetimecheckbox");

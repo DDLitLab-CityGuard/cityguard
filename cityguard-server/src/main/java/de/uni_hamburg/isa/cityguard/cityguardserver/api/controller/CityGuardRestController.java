@@ -1,4 +1,4 @@
-package de.uni_hamburg.isa.cityguard.cityguardserver.api;
+package de.uni_hamburg.isa.cityguard.cityguardserver.api.controller;
 
 import com.uber.h3core.util.LatLng;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.*;

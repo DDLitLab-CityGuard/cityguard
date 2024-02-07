@@ -1,5 +1,5 @@
 import {fetchSingleEventInfo} from "./apiwrapper/cityguard-api.js";
-import {Offcanvas} from "bootstrap";
+
 
 
 function openSidebarandFillTheData(data){

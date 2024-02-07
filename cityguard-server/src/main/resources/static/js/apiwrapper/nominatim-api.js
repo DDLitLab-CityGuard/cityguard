@@ -4,8 +4,8 @@
  * @module nominatim-api
  */
 
-import {geoCoderApiEndpoint} from "../../config/config.js";
-import {geoCoderApiEndpointReverse} from "../../config/config.js";
+import {geoCoderApiEndpoint} from "../config.js";
+import {geoCoderApiEndpointReverse} from "../config.js";
 
 
 /**
