@@ -49,7 +49,7 @@ public class SecurityConfig {
 								.requestMatchers("/api/auth/**").permitAll()
 								.requestMatchers("/welcome").permitAll()
 								.requestMatchers("/index").permitAll()
-								.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+								.requestMatchers("/css/**", "/js/**", "/images/**","/videos/**").permitAll()
 
 
 

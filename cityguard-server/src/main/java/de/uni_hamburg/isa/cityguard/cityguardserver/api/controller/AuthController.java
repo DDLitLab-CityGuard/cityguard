@@ -41,7 +41,7 @@ public class AuthController {
 	}
 
 
-	@PostMapping("/register")
+	@PostMapping("/welcome")
 	public ResponseEntity<String> registerUser(@ModelAttribute UserRegisterForm registerDto){
 		System.out.println("registering user");
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
