@@ -31,7 +31,7 @@ public class AuthController {
 		this.random = new Random();
 	}
 
-	@PostMapping("/singin")
+	@PostMapping("/login")
 	public String authenticateUser(@ModelAttribute UserLogin loginDto, HttpSession session) {
 		String email = loginDto.getUsernameOrEmail();
 		String password = loginDto.getPassword();
@@ -49,7 +49,7 @@ public class AuthController {
 				return "redirect:/index";
 			}
 		}
-		return "/signin";
+		return "/login";
 	}
 
 	@PostMapping("/welcome")
@@ -67,5 +67,22 @@ public class AuthController {
 		return new ResponseEntity<>("User created successfully!.", HttpStatus.OK);
 
 	}
+
+
+
+
+	@GetMapping("/login")
+	public String login() {
+
+		return "login";
+	}
+
+
+	@GetMapping("/welcome")
+	public String hello() {
+
+		return "welcome";
+	}
+
 
 }

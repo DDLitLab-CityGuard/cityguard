@@ -23,5 +23,10 @@ public class ThymeleafController {
 
 
 
+	@GetMapping("/login")
+	public String login() {
+
+		return "login";
+	}
 
 }
