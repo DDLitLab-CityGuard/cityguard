@@ -2,13 +2,18 @@ package de.uni_hamburg.isa.cityguard.cityguardserver.api.controller;
 
 import com.uber.h3core.util.LatLng;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.*;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.AuthenticationRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.UserRepository;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.AuthenticationToken;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.CgUser;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST Controller for the CityGuard App.
@@ -27,19 +33,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@RequiredArgsConstructor
 public class CityGuardRestController {
 
+	private final AuthenticationRepository authenticationRepository;
 	private final ReportRepository reportRepository;
 	private final CategoryRepository categoryRepository;
-
+	private final UserRepository userRepository;
 	private final SpatialIndexingService spatialIndexingService;
-
-
-	public CityGuardRestController(ReportRepository reportRepository, CategoryRepository categoryRepository, SpatialIndexingService spatialIndexingService) {
-		this.reportRepository = reportRepository;
-		this.categoryRepository = categoryRepository;
-		this.spatialIndexingService = spatialIndexingService;
-	}
 
 	/**
 	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports.
@@ -115,7 +116,8 @@ public class CityGuardRestController {
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
 	public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm,HttpSession session) {
-		if (session.getAttribute("token") == null) {
+		Long token_id = (Long) session.getAttribute("token");
+		if (token_id == null) {
 			return ResponseEntity.status(401).build();
 		}
 		if (
@@ -130,7 +132,12 @@ public class CityGuardRestController {
 
 		report.setLatitude(reportForm.getMeasured_latitude());
 		report.setLongitude(reportForm.getMeasured_longitude());
-
+		Optional<AuthenticationToken> token =  authenticationRepository.findById(token_id);
+		if (token.isEmpty()){
+			return ResponseEntity.status(401).build();
+		}
+		report.setUser(token.get().getCgUser());
+		System.out.println(token.get().getCgUser().getEmail());
 		report.setCategory(categoryRepository.findById(reportForm.getCategoryId()).orElseThrow());
 		report.setDescription(reportForm.getDescription());
 		LocalDateTime dateTime = LocalDateTime.now();
