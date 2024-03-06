@@ -86,7 +86,6 @@ public class ThymeleafController {
 		CgUser cgUser =new CgUser();
 		String encodedPassword = BCrypt.hashpw(registerDto.getPassword(), BCrypt.gensalt(6));
 		cgUser.setPassword(encodedPassword);
-		cgUser.setUsername(registerDto.getUsername());
 		cgUser.setFirstname(registerDto.getFirstname());
 		cgUser.setLastname(registerDto.getLastname());
 		cgUser.setEmail(registerDto.getEmail());
