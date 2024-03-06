@@ -15,7 +15,13 @@ import {geoCoderApiEndpointReverse} from "../config.js";
  */
 export function fetchCoordinatesMatchingString(locationString,func) {
 	fetch(geoCoderApiEndpoint + locationString)
-		.then(response => response.json())
+		.then(response => {
+			if (response.status === 401) {
+				// Redirect to the desired page
+				window.location.href = '/login';
+			}
+			return response.json(); // or handle other status codes as needed
+		})
 		.then(data => {
 			func(data)
 
@@ -24,7 +30,13 @@ export function fetchCoordinatesMatchingString(locationString,func) {
 
 export function fetchNameFromCoordinates(lat,lon, func) {
 	fetch(geoCoderApiEndpointReverse+"lat="+lat+"&lon="+lon)
-		.then(response => response.json())
+		.then(response => {
+			if (response.status === 401) {
+				// Redirect to the desired page
+				window.location.href = '/login';
+			}
+			return response.json(); // or handle other status codes as needed
+		})
 		.then(data => {
 			func(data)
 		});

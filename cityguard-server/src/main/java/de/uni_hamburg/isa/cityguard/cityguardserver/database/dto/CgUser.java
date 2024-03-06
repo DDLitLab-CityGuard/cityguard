@@ -1,20 +1,22 @@
 package de.uni_hamburg.isa.cityguard.cityguardserver.database.dto;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import jakarta.persistence.*;
-
-@Setter
 @Getter
+@Setter
 @Entity
-@Table(name = "role")
-public class Role {
+public class CgUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	@Column(unique = true)
+	private String email;
+	private String password;
+	private String firstname;
+	private String lastname;
 
-	@Column(length = 60)
-	private String name;
+
 }

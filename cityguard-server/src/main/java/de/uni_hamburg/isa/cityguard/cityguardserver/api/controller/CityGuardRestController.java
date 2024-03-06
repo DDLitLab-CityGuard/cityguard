@@ -2,12 +2,16 @@ package de.uni_hamburg.isa.cityguard.cityguardserver.api.controller;
 
 import com.uber.h3core.util.LatLng;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.*;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.AuthenticationRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.AuthenticationToken;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * REST Controller for the CityGuard App.
@@ -26,19 +31,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@RequiredArgsConstructor
 public class CityGuardRestController {
 
+	private final AuthenticationRepository authenticationRepository;
 	private final ReportRepository reportRepository;
 	private final CategoryRepository categoryRepository;
-
 	private final SpatialIndexingService spatialIndexingService;
-
-
-	public CityGuardRestController(ReportRepository reportRepository, CategoryRepository categoryRepository, SpatialIndexingService spatialIndexingService) {
-		this.reportRepository = reportRepository;
-		this.categoryRepository = categoryRepository;
-		this.spatialIndexingService = spatialIndexingService;
-	}
 
 	/**
 	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports.
@@ -50,14 +49,19 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_reports", produces = "application/json")
-	public ReportVisualization fetchReports(
+	public ResponseEntity<ReportVisualization> fetchReports(
 			@RequestParam Float latitudeUpper,
 			@RequestParam Float latitudeLower,
 			@RequestParam Float longitudeLeft,
 			@RequestParam Float longitudeRight,
 			@RequestParam List<Long> categories,
-			@RequestParam Long heatmapCategory
+			@RequestParam Long heatmapCategory,
+			HttpSession session
 	) {
+		if (isNotAuthenticated(session)) {
+			return ResponseEntity.status(401).build();
+		}
+		System.out.println("fetch_reports "+session.getAttribute("token"));
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
 		List<MarkerVisualisation> markerReports = getMarkerVisualisations(selectedReports);
 
@@ -78,7 +82,7 @@ public class CityGuardRestController {
 		reportVisualization.setHeatmap(heatmap);
 		reportVisualization.setMarkers(markerReports);
 
-		return reportVisualization;
+		return ResponseEntity.ok(reportVisualization);
 	}
 
 	private static List<MarkerVisualisation> getMarkerVisualisations(List<Report> selectedReports) {
@@ -108,7 +112,11 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
-	public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm) {
+	public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm,HttpSession session) {
+		Long token_id = (Long) session.getAttribute("token");
+		if (isNotAuthenticated(session)) {
+			return ResponseEntity.status(401).build();
+		}
 		if (
 				(!reportForm.getUseCurrentDateTime() && (reportForm.getReportedDate() == null || reportForm.getReportedTime() == null))
 		) {
@@ -121,7 +129,12 @@ public class CityGuardRestController {
 
 		report.setLatitude(reportForm.getMeasured_latitude());
 		report.setLongitude(reportForm.getMeasured_longitude());
-
+		Optional<AuthenticationToken> token =  authenticationRepository.findById(token_id);
+		if (token.isEmpty()){
+			return ResponseEntity.status(401).build();
+		}
+		report.setUser(token.get().getCgUser());
+		System.out.println(token.get().getCgUser().getEmail());
 		report.setCategory(categoryRepository.findById(reportForm.getCategoryId()).orElseThrow());
 		report.setDescription(reportForm.getDescription());
 		LocalDateTime dateTime = LocalDateTime.now();
@@ -141,8 +154,12 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_categories",produces = "application/json")
-	public List<Category> fetchCategories(){
-		return categoryRepository.findAll();
+	public ResponseEntity<List<Category>> fetchCategories(HttpSession session) {
+		if (isNotAuthenticated(session)) {
+			return ResponseEntity.status(401).build();
+		}
+
+		return ResponseEntity.ok(categoryRepository.findAll());
 	}
 
 	/**
@@ -153,7 +170,10 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_single_event_info",produces = "application/json")
-	public ReportInformation fetchSingleReportInformation(@RequestParam Long customID) {
+	public ResponseEntity<ReportInformation> fetchSingleReportInformation(@RequestParam Long customID,HttpSession session) {
+		if (isNotAuthenticated(session)) {
+			return ResponseEntity.status(401).build();
+		}
 		ReportInformation reportInformation = new ReportInformation();
 		Report report = reportRepository.findById(customID).orElseThrow();
 		reportInformation.setCategory(report.getCategory().getName());
@@ -166,6 +186,11 @@ public class CityGuardRestController {
 		reportInformation.setCategoryColor(report.getCategory().getColor());
 		reportInformation.setCategoryIcon(report.getCategory().getIcon());
 		reportInformation.setTitle("Report #" + report.getId());
-		return reportInformation;
-}
+		return ResponseEntity.ok(reportInformation);
+	}
+
+	private boolean isNotAuthenticated(HttpSession session) {
+		return session.getAttribute("token") == null ||
+				authenticationRepository.findById((Long) session.getAttribute("token")).isEmpty();
+	}
 }

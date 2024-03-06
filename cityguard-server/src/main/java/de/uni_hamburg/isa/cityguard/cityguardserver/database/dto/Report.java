@@ -26,6 +26,8 @@ public class Report {
 	@ManyToOne
 	private Category category;
 	private LocalDateTime dateTime;
+	@ManyToOne
+	private CgUser user;
 
 
 
