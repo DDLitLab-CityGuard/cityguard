@@ -15,7 +15,14 @@ export let last_known_categories = [];
  */
 export function fetchCategories(func){
 	fetch(`${apiEndpoint}/fetch_categories`)
-		.then(response => response.json())
+
+		.then(response => {
+			if (response.status === 401) {
+				// Redirect to the desired page
+				window.location.href = '/login';
+			}
+			return response.json(); // or handle other status codes as needed
+		})
 		.then(data => {
 			last_known_categories = data;
 			func(data)
@@ -45,7 +52,13 @@ export function fetchReports(latitudeLower, latitudeUpper, longitudeLeft, longit
 			heatmapCategory: heatmapCategory
 		}
 	))
-		.then(response => response.json())
+		.then(response => {
+			if (response.status === 401) {
+				// Redirect to the desired page
+				window.location.href = '/login';
+			}
+			return response.json(); // or handle other status codes as needed
+		})
 		.then(data => {
 			func(data)
 		});
@@ -66,6 +79,10 @@ export function submitReport(report){
 
 	fetch(`${apiEndpoint}/submit_report`, options)
 		.then(response => {
+			if (response.status === 401) {
+				// Redirect to the desired page
+				window.location.href = '/login';
+			}
 			if (!response.ok) {
 				throw new Error(`HTTP error! Status: ${response.status}`);
 			}
@@ -79,7 +96,13 @@ export function fetchSingleEventInfo(customID,func){
 			customID: customID
 		}
 	))
-		.then(response => response.json())
+		.then(response => {
+			if (response.status === 401) {
+				// Redirect to the desired page
+				window.location.href = '/login';
+			}
+			return response.json(); // or handle other status codes as needed
+		})
 		.then(data => {
 			func(data);
 		});
