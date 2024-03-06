@@ -5,10 +5,8 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.*;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.AuthenticationRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
-import de.uni_hamburg.isa.cityguard.cityguardserver.database.UserRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.AuthenticationToken;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
-import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.CgUser;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
 import jakarta.servlet.http.HttpSession;
@@ -39,7 +37,6 @@ public class CityGuardRestController {
 	private final AuthenticationRepository authenticationRepository;
 	private final ReportRepository reportRepository;
 	private final CategoryRepository categoryRepository;
-	private final UserRepository userRepository;
 	private final SpatialIndexingService spatialIndexingService;
 
 	/**
@@ -61,7 +58,7 @@ public class CityGuardRestController {
 			@RequestParam Long heatmapCategory,
 			HttpSession session
 	) {
-		if (session.getAttribute("token") == null) {
+		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
 		System.out.println("fetch_reports "+session.getAttribute("token"));
@@ -117,7 +114,7 @@ public class CityGuardRestController {
 	@PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
 	public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm,HttpSession session) {
 		Long token_id = (Long) session.getAttribute("token");
-		if (token_id == null) {
+		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
 		if (
@@ -158,7 +155,7 @@ public class CityGuardRestController {
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_categories",produces = "application/json")
 	public ResponseEntity<List<Category>> fetchCategories(HttpSession session) {
-		if (session.getAttribute("token") == null) {
+		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
 
@@ -174,7 +171,7 @@ public class CityGuardRestController {
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_single_event_info",produces = "application/json")
 	public ResponseEntity<ReportInformation> fetchSingleReportInformation(@RequestParam Long customID,HttpSession session) {
-		if (session.getAttribute("token") == null) {
+		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
 		ReportInformation reportInformation = new ReportInformation();
@@ -190,5 +187,10 @@ public class CityGuardRestController {
 		reportInformation.setCategoryIcon(report.getCategory().getIcon());
 		reportInformation.setTitle("Report #" + report.getId());
 		return ResponseEntity.ok(reportInformation);
-}
+	}
+
+	private boolean isNotAuthenticated(HttpSession session) {
+		return session.getAttribute("token") == null ||
+				authenticationRepository.findById((Long) session.getAttribute("token")).isEmpty();
+	}
 }

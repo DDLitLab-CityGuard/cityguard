@@ -9,8 +9,6 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.CgUser;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,7 +28,7 @@ public class ThymeleafController {
 
 	@GetMapping("/welcome")
 	public String hello(HttpSession session){
-		if (session.getAttribute("token") != null) {
+		if (isAuthenticated(session)) {
 			return "redirect:/index";
 		}
 		return "welcome";
@@ -39,7 +37,7 @@ public class ThymeleafController {
 	@GetMapping({"/", "/index"})
 	public String index(HttpSession session) {
 		System.out.println(session.getAttribute("token"));
-		if (session.getAttribute("token") == null) {
+		if (isAuthenticated(session)) {
 			return "redirect:/login";
 		}
 		return "index";
@@ -47,8 +45,7 @@ public class ThymeleafController {
 
 	@GetMapping("/login")
 	public String login(HttpSession session) {
-
-		if (session.getAttribute("token") != null) {
+		if (isAuthenticated(session)) {
 			return "redirect:/index";
 		}
 		return "login";
@@ -93,5 +90,9 @@ public class ThymeleafController {
 		return "redirect:/login";
 	}
 
+	private boolean isAuthenticated(HttpSession session) {
+		return session.getAttribute("token") != null &&
+				authenticationRepository.findById((Long) session.getAttribute("token")).isPresent();
+	}
 
 }
