@@ -37,7 +37,7 @@ public class ThymeleafController {
 	@GetMapping({"/", "/index"})
 	public String index(HttpSession session) {
 		System.out.println(session.getAttribute("token"));
-		if (isAuthenticated(session)) {
+		if (! isAuthenticated(session)) {
 			return "redirect:/login";
 		}
 		return "index";
