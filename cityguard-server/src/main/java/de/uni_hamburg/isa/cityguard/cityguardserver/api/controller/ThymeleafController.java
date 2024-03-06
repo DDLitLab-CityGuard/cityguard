@@ -29,21 +29,28 @@ public class ThymeleafController {
 	private final Random random = new Random();
 
 	@GetMapping("/welcome")
-	public String hello() {
+	public String hello(HttpSession session){
+		if (session.getAttribute("token") != null) {
+			return "redirect:/index";
+		}
 		return "welcome";
 	}
 
-	@GetMapping("/index")
+	@GetMapping({"/", "/index"})
 	public String index(HttpSession session) {
-		if (session.getAttribute("token") != null) {
-			System.out.println("Token: " + session.getAttribute("token"));
+		System.out.println(session.getAttribute("token"));
+		if (session.getAttribute("token") == null) {
+			return "redirect:/login";
 		}
 		return "index";
 	}
 
 	@GetMapping("/login")
-	public String login() {
+	public String login(HttpSession session) {
 
+		if (session.getAttribute("token") != null) {
+			return "redirect:/index";
+		}
 		return "login";
 	}
 
@@ -74,7 +81,7 @@ public class ThymeleafController {
 	}
 
 	@PostMapping("/welcome")
-	public ResponseEntity<String> registerUser(@ModelAttribute UserRegisterForm registerDto){
+	public String registerUser(@ModelAttribute UserRegisterForm registerDto){
 		System.out.println("registering user");
 		CgUser cgUser =new CgUser();
 		String encodedPassword = BCrypt.hashpw(registerDto.getPassword(), BCrypt.gensalt(6));
@@ -84,7 +91,7 @@ public class ThymeleafController {
 		cgUser.setLastname(registerDto.getLastname());
 		cgUser.setEmail(registerDto.getEmail());
 		userRepository.save(cgUser);
-		return new ResponseEntity<>("User created successfully!.", HttpStatus.OK);
+		return "redirect:/login";
 	}
 
 

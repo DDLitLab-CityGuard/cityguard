@@ -7,6 +7,7 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -50,14 +51,19 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_reports", produces = "application/json")
-	public ReportVisualization fetchReports(
+	public ResponseEntity<ReportVisualization> fetchReports(
 			@RequestParam Float latitudeUpper,
 			@RequestParam Float latitudeLower,
 			@RequestParam Float longitudeLeft,
 			@RequestParam Float longitudeRight,
 			@RequestParam List<Long> categories,
-			@RequestParam Long heatmapCategory
+			@RequestParam Long heatmapCategory,
+			HttpSession session
 	) {
+		if (session.getAttribute("token") == null) {
+			return ResponseEntity.status(401).build();
+		}
+		System.out.println("fetch_reports "+session.getAttribute("token"));
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
 		List<MarkerVisualisation> markerReports = getMarkerVisualisations(selectedReports);
 
@@ -78,7 +84,7 @@ public class CityGuardRestController {
 		reportVisualization.setHeatmap(heatmap);
 		reportVisualization.setMarkers(markerReports);
 
-		return reportVisualization;
+		return ResponseEntity.ok(reportVisualization);
 	}
 
 	private static List<MarkerVisualisation> getMarkerVisualisations(List<Report> selectedReports) {
@@ -108,7 +114,10 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "/submit_report",consumes = "application/json",produces = "application/json")
-	public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm) {
+	public ResponseEntity<String> submitReports(@Valid @RequestBody ReportForm reportForm,HttpSession session) {
+		if (session.getAttribute("token") == null) {
+			return ResponseEntity.status(401).build();
+		}
 		if (
 				(!reportForm.getUseCurrentDateTime() && (reportForm.getReportedDate() == null || reportForm.getReportedTime() == null))
 		) {
@@ -141,8 +150,12 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_categories",produces = "application/json")
-	public List<Category> fetchCategories(){
-		return categoryRepository.findAll();
+	public ResponseEntity<List<Category>> fetchCategories(HttpSession session) {
+		if (session.getAttribute("token") == null) {
+			return ResponseEntity.status(401).build();
+		}
+
+		return ResponseEntity.ok(categoryRepository.findAll());
 	}
 
 	/**
@@ -153,7 +166,10 @@ public class CityGuardRestController {
 	 */
 	@CrossOrigin(origins = "*")
 	@GetMapping(value = "/fetch_single_event_info",produces = "application/json")
-	public ReportInformation fetchSingleReportInformation(@RequestParam Long customID) {
+	public ResponseEntity<ReportInformation> fetchSingleReportInformation(@RequestParam Long customID,HttpSession session) {
+		if (session.getAttribute("token") == null) {
+			return ResponseEntity.status(401).build();
+		}
 		ReportInformation reportInformation = new ReportInformation();
 		Report report = reportRepository.findById(customID).orElseThrow();
 		reportInformation.setCategory(report.getCategory().getName());
@@ -166,6 +182,6 @@ public class CityGuardRestController {
 		reportInformation.setCategoryColor(report.getCategory().getColor());
 		reportInformation.setCategoryIcon(report.getCategory().getIcon());
 		reportInformation.setTitle("Report #" + report.getId());
-		return reportInformation;
+		return ResponseEntity.ok(reportInformation);
 }
 }
