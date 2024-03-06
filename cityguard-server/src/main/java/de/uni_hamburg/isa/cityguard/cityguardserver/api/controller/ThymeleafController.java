@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -50,7 +49,7 @@ public class ThymeleafController {
 
 	@PostMapping("/login")
 	public String authenticateUser(@ModelAttribute UserLogin loginDto, HttpSession session) {
-		String email = loginDto.getUsernameOrEmail();
+		String email = loginDto.getEmail();
 		System.out.println("email: " + email);
 		String password = loginDto.getPassword();
 		Optional<CgUser> user = userRepository.findByEmail(email);
