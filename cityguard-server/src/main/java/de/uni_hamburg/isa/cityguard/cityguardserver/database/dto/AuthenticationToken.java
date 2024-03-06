@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Entity
 public class AuthenticationToken {
 
-    @Id
-    private Long id;
-    private LocalDateTime expirationDate;
-    @ManyToOne
-    private CgUser cgUser;
+	@Id
+	private Long id;
+	private LocalDateTime expirationDate;
+	@ManyToOne
+	private CgUser cgUser;
 }
