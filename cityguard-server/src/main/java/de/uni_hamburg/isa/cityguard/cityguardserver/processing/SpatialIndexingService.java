@@ -99,4 +99,16 @@ public class SpatialIndexingService {
 		resolution = distance > 12000 ? 1 : resolution;
 		return resolution;
 	}
+
+	/**
+	 * This method calculates the haversine distance between two coordinates.
+	 *
+	 * @param a The first coordinate
+	 * @param b The second coordinate
+	 * @param unit The unit of the distance
+	 * @return The distance between the two coordinates
+	 */
+	public double distance(LatLng a, LatLng b, LengthUnit unit){
+		return h3.greatCircleDistance(a, b, unit);
+	}
 }

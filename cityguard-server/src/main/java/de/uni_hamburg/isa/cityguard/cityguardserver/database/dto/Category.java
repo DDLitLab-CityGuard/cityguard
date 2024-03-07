@@ -1,9 +1,6 @@
 package de.uni_hamburg.isa.cityguard.cityguardserver.database.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +20,7 @@ public class Category {
 	private Boolean allowDiscrete;
 	private String	color;
 	private String icon;
-
+	@Column(nullable = false)
+	private Long aggregationRadiusMeters;
+	private Long minimumReports;
 }

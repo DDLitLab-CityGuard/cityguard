@@ -8,6 +8,7 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.AuthenticationToken;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
+import de.uni_hamburg.isa.cityguard.cityguardserver.processing.ClusterAnalysisService;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -37,7 +38,7 @@ public class CityGuardRestController {
 	private final AuthenticationRepository authenticationRepository;
 	private final ReportRepository reportRepository;
 	private final CategoryRepository categoryRepository;
-	private final SpatialIndexingService spatialIndexingService;
+	private final ClusterAnalysisService clusterAnalysisService;
 
 	/**
 	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports.
@@ -61,47 +62,13 @@ public class CityGuardRestController {
 		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
-		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
-		List<MarkerVisualisation> markerReports = getMarkerVisualisations(selectedReports);
-
-		List<Report> heatmapReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, List.of(heatmapCategory));
-
-		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
+		List<MarkerVisualisation> markerReports = clusterAnalysisService.generateMarkerVisualization(latitudeUpper, latitudeLower, longitudeLeft, longitudeRight, categories);
+		List<HeatmapCell> heatmap = clusterAnalysisService.generateHeatmapVisualization(latitudeUpper, latitudeLower, longitudeLeft, longitudeRight, heatmapCategory);
 		ReportVisualization reportVisualization = new ReportVisualization();
-		List<HeatmapCell> heatmap = spatialIndexingService.calculateHeatmap(heatmapReports, resolution);
-
-		List<HeatmapCell> heatmap2 = spatialIndexingService.calculateAllCells(
-				resolution,
-				new LatLon(latitudeUpper, longitudeLeft),
-				new LatLon(latitudeUpper, longitudeRight),
-				new LatLon(latitudeLower, longitudeRight),
-				new LatLon(latitudeLower, longitudeLeft)
-		);
-		heatmap.addAll(heatmap2);
 		reportVisualization.setHeatmap(heatmap);
 		reportVisualization.setMarkers(markerReports);
-
 		return ResponseEntity.ok(reportVisualization);
 	}
-
-	private static List<MarkerVisualisation> getMarkerVisualisations(List<Report> selectedReports) {
-		List<MarkerVisualisation> markerReports = new ArrayList<>();
-
-
-		for (Report report : selectedReports) {
-			if (report.getCategory().getAllowDiscrete()){
-				MarkerVisualisation markerVisualisation = new MarkerVisualisation();
-				markerVisualisation.setId(report.getId());
-				markerVisualisation.setLatitude(report.getLatitude());
-				markerVisualisation.setLongitude(report.getLongitude());
-				markerVisualisation.setCategoryColor(report.getCategory().getColor());
-				markerVisualisation.setCategoryIcon(report.getCategory().getIcon());
-				markerReports.add(markerVisualisation);
-			}
-		}
-		return markerReports;
-	}
-
 
 	/**
 	 * This endpoint submits a report to the server.
