@@ -61,7 +61,6 @@ public class CityGuardRestController {
 		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
-		System.out.println("fetch_reports "+session.getAttribute("token"));
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
 		List<MarkerVisualisation> markerReports = getMarkerVisualisations(selectedReports);
 
