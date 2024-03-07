@@ -22,5 +22,5 @@ public class Category {
 	private String icon;
 	@Column(nullable = false)
 	private Long aggregationRadiusMeters;
-	private Long minimumReports;
+	private Long minimumScore;
 }

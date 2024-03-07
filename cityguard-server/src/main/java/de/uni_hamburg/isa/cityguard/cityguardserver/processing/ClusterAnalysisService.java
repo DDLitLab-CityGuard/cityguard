@@ -79,22 +79,47 @@ public class ClusterAnalysisService {
             MarkerVisualisation markerVisualisation = new MarkerVisualisation();
             Map.Entry<Report, List<Report>> entry = entries.remove(0);
             Report report = entry.getKey();
+            entry.getValue().add(report);
+            LatLon meanPosition = calculateMeanPosition(entry.getValue());
+            float score = clusterScore(entry.getValue(), meanPosition);
+
+
             markerVisualisation.setId(report.getId());
-            markerVisualisation.setLatitude(report.getLatitude());
-            markerVisualisation.setLongitude(report.getLongitude());
+            markerVisualisation.setLatitude(meanPosition.getLatitude());
+            markerVisualisation.setLongitude(meanPosition.getLongitude());
             markerVisualisation.setCategoryColor(report.getCategory().getColor());
             markerVisualisation.setCategoryIcon(report.getCategory().getIcon());
 
-            if(entry.getValue().size() + 1 >= report.getCategory().getMinimumReports()){
+            if(score >= report.getCategory().getMinimumScore()){
                 markerReports.add(markerVisualisation);
             }
 
             for (Report neighbour : entry.getValue()){
                 entries.removeIf(e -> e.getKey().getId().equals(neighbour.getId()));
             }
-
-
         }
         return markerReports;
+    }
+
+    private float clusterScore(List<Report> reports, LatLon clusterCenter){
+        float score = 0.5f;
+        Map<Long, Integer> userDamping = new HashMap<>();
+        for (Report report : reports){
+            int damping = userDamping.getOrDefault(report.getUser().getId(), 0);
+            double distance = spatialIndexingService.distance(new LatLng(report.getLatitude(), report.getLongitude()), new LatLng(clusterCenter.getLatitude(), clusterCenter.getLongitude()), LengthUnit.m);
+            score += (float) (1f * Math.pow(0.98f, distance) * (1f / (1f + damping)));
+            userDamping.put(report.getUser().getId(), userDamping.getOrDefault(report.getUser().getId(), 0) + 1);
+        }
+        return score;
+    }
+
+    private LatLon calculateMeanPosition(List<Report> reports){
+        float latitude = 0;
+        float longitude = 0;
+        for (Report report : reports){
+            latitude += report.getLatitude();
+            longitude += report.getLongitude();
+        }
+        return new LatLon(latitude/reports.size(), longitude/reports.size());
     }
 }

@@ -6,6 +6,6 @@ CREATE TABLE category
     color   VARCHAR(255),
     icon    VARCHAR(255),
     aggregation_radius_meters BIGINT,
-    minimum_reports BIGINT,
+    minimum_score DOUBLE PRECISION,
     CONSTRAINT pk_category PRIMARY KEY (id)
 );
