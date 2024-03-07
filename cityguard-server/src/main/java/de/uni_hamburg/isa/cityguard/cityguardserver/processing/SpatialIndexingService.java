@@ -10,10 +10,7 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Service for spatial indexing.
@@ -77,6 +74,53 @@ public class SpatialIndexingService {
 			heatmap.add(cell);
 		}
 		return heatmap;
+	}
+
+	public List<LatLon> polygonFromAddress(String address) {
+		return h3.cellToBoundary(address).stream().map(latLng -> new LatLon((float) latLng.lat, (float) latLng.lng)).toList();
+	}
+
+
+
+	public Map<String, List<Report>> groupByCell(List<Report> reports, int resolution) {
+		HashMap<String, List<Report>> address_map = new HashMap<>();
+		for (Report report : reports) {
+			String hexAddr = h3.latLngToCellAddress(report.getLatitude(), report.getLongitude(), resolution);
+			if (address_map.containsKey(hexAddr)) {
+				address_map.get(hexAddr).add(report);
+			} else {
+				address_map.put(hexAddr, new ArrayList<>(List.of(report)));
+			}
+		}
+		return address_map;
+	}
+
+	public String clusterAddress(Cluster cluster, int resolution) {
+		return h3.latLngToCellAddress(cluster.center().getLatitude(), cluster.center().getLongitude(), resolution);
+	}
+
+	public List<String> addressListFromBounds(
+			Float latitudeUpper,
+			Float latitudeLower,
+			Float longitudeLeft,
+			Float longitudeRight,
+			int resolution
+	) {
+		List<LatLng> latLngList = new ArrayList<>();
+		latLngList.add(new LatLng(latitudeUpper, longitudeLeft));
+		latLngList.add(new LatLng(latitudeUpper, longitudeRight));
+		latLngList.add(new LatLng(latitudeLower, longitudeRight));
+		latLngList.add(new LatLng(latitudeLower, longitudeLeft));
+		latLngList.add(new LatLng(latitudeUpper, longitudeLeft));
+		return h3.polygonToCellAddresses(latLngList, null, resolution);
+	}
+
+	public List<String> addressBleed(List<String> addresses, int radius) {
+		Set<String> bleed = new HashSet<>();
+		for (String address : addresses) {
+			bleed.addAll(h3.gridDisk(address, radius));
+		}
+		return new ArrayList<>(bleed);
 	}
 
 	/**
