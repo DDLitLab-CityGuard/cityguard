@@ -100,7 +100,6 @@ public class CityGuardRestController {
 			return ResponseEntity.status(401).build();
 		}
 		report.setUser(token.get().getCgUser());
-		System.out.println(token.get().getCgUser().getEmail());
 		report.setCategory(categoryRepository.findById(reportForm.getCategoryId()).orElseThrow());
 		report.setDescription(reportForm.getDescription());
 		LocalDateTime dateTime = LocalDateTime.now();
