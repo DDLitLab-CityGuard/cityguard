@@ -27,27 +27,27 @@ public class ClusterAnalysisService {
 			Long heatmapCategory
 	){
 		List<Report> heatmapReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, List.of(heatmapCategory));
-		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
+		int resolution = 10;//spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
 
-		List<Cluster> clusters = weightedFixedRadiusNearestNeighbour(heatmapReports);
+		Map<String, List<Report>> addressMap = spatialIndexingService.groupByCell(heatmapReports, resolution);
+		List<String> addressList = addressMap.keySet().stream().toList();
+
 		Map<String, Float> scoreMap = new HashMap<>();
-		for (Cluster cluster : clusters){
-			if (cluster.score() >= cluster.category().getMinimumScore()){
-				Map<String, List<Report>> addressMap = spatialIndexingService.groupByCell(cluster.reportList(), resolution);
-				for (String address : addressMap.keySet()){
-					scoreMap.put(address, 0.4f);
+		for (String address : addressList){
+			List<List<String>> addressRings = spatialIndexingService.addressBleed(address, 5);
+			for (int i = 0; i < addressRings.size(); i++) {
+				List<String> ring = addressRings.get(i);
+				for (String cellAddress : ring) {
+					float score = scoreMap.getOrDefault(cellAddress, 0f);
+					scoreMap.put(cellAddress, Math.max(score, ((-0.6f/6f)*i)+0.6f));
 				}
-				scoreMap.put(spatialIndexingService.clusterAddress(cluster, resolution), 0.6f);
 			}
 		}
 
-		List<String> addressList = spatialIndexingService.addressListFromBounds(latitudeUpper, latitudeLower, longitudeLeft, longitudeRight, resolution);
-
 		List<HeatmapCell> heatmap = new ArrayList<>();
-		for (String address : addressList){
-			float score = scoreMap.getOrDefault(address, 0.1f);
+		for (String address : scoreMap.keySet()){
 			HeatmapCell cell = new HeatmapCell();
-			cell.setValue(Math.min(score, 0.6f));
+			cell.setValue(scoreMap.get(address));
 			cell.setPolygon(spatialIndexingService.polygonFromAddress(address));
 			heatmap.add(cell);
 		}

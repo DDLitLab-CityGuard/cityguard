@@ -4,7 +4,6 @@ package de.uni_hamburg.isa.cityguard.cityguardserver.processing;
 import com.uber.h3core.H3Core;
 import com.uber.h3core.LengthUnit;
 import com.uber.h3core.util.LatLng;
-import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.LatLon;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import org.springframework.stereotype.Service;
@@ -61,12 +60,8 @@ public class SpatialIndexingService {
 		return h3.polygonToCellAddresses(latLngList, null, resolution);
 	}
 
-	public List<String> addressBleed(List<String> addresses, int radius) {
-		Set<String> bleed = new HashSet<>();
-		for (String address : addresses) {
-			bleed.addAll(h3.gridDisk(address, radius));
-		}
-		return new ArrayList<>(bleed);
+	public List<List<String>> addressBleed(String origin, int distance) {
+		return h3.gridDiskDistances(origin, distance);
 	}
 
 	/**
