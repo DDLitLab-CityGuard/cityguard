@@ -1,11 +1,14 @@
 package de.uni_hamburg.isa.cityguard.cityguardserver.database;
 
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.CgUser;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -43,5 +46,20 @@ public interface ReportRepository extends JpaRepository<Report,Long> {
 			@Param("maxlat") Float maxLatitude,
 			@Param("categories") List<Long> categories
 	);
+
+
+
+
+	@Query("SELECT r FROM Report r "
+			+ "WHERE ( (:user = r.user) AND (:cat=r.category)) "
+			+"AND(r.spam = false)"
+			+ "AND (:datetimealtered < r.dateTime)"
+			+"AND (:datetimeentered > r.dateTime)"	)
+	List<Report> findSimilarReportsFromSameUser(
+			@Param("user") CgUser user,
+			@Param("cat") Category cat,
+			@Param("datetimealtered")LocalDateTime dateTimeAltered,
+			@Param("datetimeentered") LocalDateTime dateTime
+			);
 
 }

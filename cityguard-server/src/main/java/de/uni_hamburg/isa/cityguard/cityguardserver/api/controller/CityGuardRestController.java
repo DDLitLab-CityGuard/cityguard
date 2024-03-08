@@ -9,6 +9,7 @@ import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.AuthenticationT
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.ClusterAnalysisService;
+import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpamDetectionService;
 import de.uni_hamburg.isa.cityguard.cityguardserver.processing.SpatialIndexingService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -39,6 +40,7 @@ public class CityGuardRestController {
 	private final ReportRepository reportRepository;
 	private final CategoryRepository categoryRepository;
 	private final ClusterAnalysisService clusterAnalysisService;
+	private final SpamDetectionService spamDetectionService;
 
 	/**
 	 * This endpoint fetches all reports in a given area and calculates a heatmap based on some reports.
@@ -83,6 +85,7 @@ public class CityGuardRestController {
 		if (isNotAuthenticated(session)) {
 			return ResponseEntity.status(401).build();
 		}
+
 		if (
 				(!reportForm.getUseCurrentDateTime() && (reportForm.getReportedDate() == null || reportForm.getReportedTime() == null))
 		) {
@@ -107,7 +110,10 @@ public class CityGuardRestController {
 			dateTime = reportForm.getReportedDate().atTime(reportForm.getReportedTime());
 		}
 		report.setDateTime(dateTime);
+		report.setSpam(false);
+		spamDetectionService.handleSimilarReportsInTheRadius(report);
 		reportRepository.save(report);
+
 		return ResponseEntity.ok("{\"status\": \"success\"}");
 	}
 

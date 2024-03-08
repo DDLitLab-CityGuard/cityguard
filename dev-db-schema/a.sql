@@ -7,5 +7,6 @@ CREATE TABLE category
     icon    VARCHAR(255),
     aggregation_radius_meters BIGINT,
     minimum_score DOUBLE PRECISION,
+    spam_detection_frequency_in_minutes BIGINT,
     CONSTRAINT pk_category PRIMARY KEY (id)
 );
