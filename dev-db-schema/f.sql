@@ -1,7 +1,7 @@
 
 
 INSERT INTO category (allow_discrete,"name","color","icon","aggregation_radius_meters", "minimum_score", "heatmap_spread_radius")
-SELECT true, 'violence','red','gun', 100, 1.0, 5
+SELECT true, 'violence','red','gun', 100, 2.0, 5
     WHERE NOT EXISTS (SELECT 1 FROM category WHERE "name" = 'violence');
 
 INSERT INTO category (allow_discrete,"name","color","icon","aggregation_radius_meters", "minimum_score", "heatmap_spread_radius")

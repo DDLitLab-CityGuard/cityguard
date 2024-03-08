@@ -115,7 +115,7 @@ public class ClusterAnalysisService {
 		for (Report report : reports){
 			int damping = userDamping.getOrDefault(report.getUser().getId(), 0);
 			double distance = spatialIndexingService.distance(new LatLng(report.getLatitude(), report.getLongitude()), new LatLng(clusterCenter.getLatitude(), clusterCenter.getLongitude()), LengthUnit.m);
-			score += 1f; //TODO USER DAMPING //* Math.pow(0.98f, distance)
+			score += 1f; // Math.pow(0.98f, distance)
 			userDamping.put(report.getUser().getId(), userDamping.getOrDefault(report.getUser().getId(), 0) + 1);
 		}
 		return score;
