@@ -36,7 +36,6 @@ public class ThymeleafController {
 
 	@GetMapping({"/", "/index"})
 	public String index(HttpSession session) {
-		System.out.println(session.getAttribute("token"));
 		if (! isAuthenticated(session)) {
 			return "redirect:/login";
 		}
@@ -54,12 +53,8 @@ public class ThymeleafController {
 	@PostMapping("/login")
 	public String authenticateUser(@ModelAttribute UserLogin loginDto, HttpSession session) {
 		String email = loginDto.getEmail();
-		System.out.println("email: " + email);
 		String password = loginDto.getPassword();
 		Optional<CgUser> user = userRepository.findByEmail(email);
-		for (CgUser cgUser : userRepository.findAll()) {
-			System.out.println(cgUser.getEmail() + " " + cgUser.getPassword());
-		}
 
 		if (user.isPresent()) {
 			if (BCrypt.checkpw(password, user.get().getPassword())) {
@@ -79,7 +74,6 @@ public class ThymeleafController {
 
 	@PostMapping("/welcome")
 	public String registerUser(@ModelAttribute UserRegisterForm registerDto){
-		System.out.println("registering user");
 		CgUser cgUser =new CgUser();
 		String encodedPassword = BCrypt.hashpw(registerDto.getPassword(), BCrypt.gensalt(6));
 		cgUser.setPassword(encodedPassword);
