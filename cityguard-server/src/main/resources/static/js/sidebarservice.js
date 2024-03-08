@@ -3,7 +3,7 @@ import {fetchSingleEventInfo} from "./apiwrapper/cityguard-api.js";
 
 
 function openSidebarandFillTheData(data){
-	let offcanvas= new Offcanvas(document.getElementById("offCanvasForInfo"));
+	let offcanvas= new bootstrap.Offcanvas(document.getElementById("offCanvasForInfo"));
 	let sidebartitle = document.getElementById("offcanvasScrollingLabel");
 	let sidebarcategory = document.getElementById("sidebar-category");
 	let sidebardescription = document.getElementById("sidebar-desc");
