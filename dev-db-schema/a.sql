@@ -7,5 +7,6 @@ CREATE TABLE category
     icon    VARCHAR(255),
     aggregation_radius_meters BIGINT,
     minimum_score DOUBLE PRECISION,
+    heatmap_spread_radius BIGINT,
     CONSTRAINT pk_category PRIMARY KEY (id)
 );
