@@ -23,4 +23,6 @@ public class Category {
 	@Column(nullable = false)
 	private Long aggregationRadiusMeters;
 	private Long minimumScore;
+	private Long heatmapSpreadRadius;
+	//TODO HALFLIFE FACTOR
 }
