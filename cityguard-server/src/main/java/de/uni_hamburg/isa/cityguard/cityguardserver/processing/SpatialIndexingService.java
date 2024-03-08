@@ -24,63 +24,9 @@ public class SpatialIndexingService {
 	public SpatialIndexingService() throws IOException {
 	}
 
-	/**
-	 * This method calculates a heatmap based on a list of reports.
-	 * @param reports The reports to calculate the heatmap from
-	 * @param resolution The resolution of the heatmap
-	 * @return A list of heatmap cells
-	 */
-	public List<HeatmapCell> calculateHeatmap(List<Report> reports, int resolution) {
-		HashMap<String, Integer> address_map = new HashMap<>();
-		for (Report report : reports) {
-			LatLon coordinate = new LatLon(report.getLatitude(), report.getLongitude());
-			String hexAddr = h3.latLngToCellAddress(coordinate.getLatitude(), coordinate.getLongitude(), resolution);
-			h3.gridDisk(hexAddr, 1).forEach(hexAddr2 -> {
-				if (address_map.containsKey(hexAddr2)) {
-					address_map.put(hexAddr2, address_map.get(hexAddr2) + 1);
-				} else {
-					address_map.put(hexAddr2, 1);
-				}
-			});
-			if (address_map.containsKey(hexAddr)) {
-				address_map.put(hexAddr, address_map.get(hexAddr) + 1);
-			} else {
-				address_map.put(hexAddr, 1);
-			}
-		}
-		List<HeatmapCell> heatmap = new ArrayList<>();
-		for (String hexAddr : address_map.keySet()) {
-			HeatmapCell cell = new HeatmapCell();
-			cell.setValue(address_map.get(hexAddr)/10.0f);
-			cell.setPolygon(h3.cellToBoundary(hexAddr).stream().map(latLng -> new LatLon((float) latLng.lat, (float) latLng.lng)).toList());
-			heatmap.add(cell);
-		}
-		return heatmap;
-	}
-
-	/**
-	 * This method calculates a List of heatmap cells between four coordinates.
-	 * Every cell is calculated with the given resolution and the value is set to 0.1.
-	 * @return A list of heatmap cells
-	 */
-	public List<HeatmapCell> calculateAllCells(int resolution, LatLon... coordinates) {
-		List<HeatmapCell> heatmap = new ArrayList<>();
-		List<LatLng> latLngs = Arrays.stream(coordinates).map(coordinate -> new LatLng(coordinate.getLatitude(), coordinate.getLongitude())).toList();
-		List<String> addresses = h3.polygonToCellAddresses(latLngs,null, resolution);
-		for (String hexAddr : addresses) {
-			HeatmapCell cell = new HeatmapCell();
-			cell.setValue(0.1f);
-			cell.setPolygon(h3.cellToBoundary(hexAddr).stream().map(latLng -> new LatLon((float) latLng.lat, (float) latLng.lng)).toList());
-			heatmap.add(cell);
-		}
-		return heatmap;
-	}
-
 	public List<LatLon> polygonFromAddress(String address) {
 		return h3.cellToBoundary(address).stream().map(latLng -> new LatLon((float) latLng.lat, (float) latLng.lng)).toList();
 	}
-
-
 
 	public Map<String, List<Report>> groupByCell(List<Report> reports, int resolution) {
 		HashMap<String, List<Report>> address_map = new HashMap<>();

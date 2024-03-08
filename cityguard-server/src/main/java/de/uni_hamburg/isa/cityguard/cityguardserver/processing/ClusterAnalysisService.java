@@ -104,9 +104,9 @@ public class ClusterAnalysisService {
         float score = 0.5f;
         Map<Long, Integer> userDamping = new HashMap<>();
         for (Report report : reports){
-            int damping = userDamping.getOrDefault(report.getUser().getId(), 0);
+            //int damping = userDamping.getOrDefault(report.getUser().getId(), 0);
             double distance = spatialIndexingService.distance(new LatLng(report.getLatitude(), report.getLongitude()), new LatLng(clusterCenter.getLatitude(), clusterCenter.getLongitude()), LengthUnit.m);
-            score += (float) (1f * Math.pow(0.98f, distance) * (1f / (1f + damping)));
+            score += (float) (1f * Math.pow(0.98f, distance));
             userDamping.put(report.getUser().getId(), userDamping.getOrDefault(report.getUser().getId(), 0) + 1);
         }
         return score;
