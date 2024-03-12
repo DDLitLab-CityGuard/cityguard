@@ -6,6 +6,7 @@ CREATE TABLE report
     description VARCHAR(255),
     category_id BIGINT,
     date_time   TIMESTAMP WITHOUT TIME ZONE,
+    spam        BOOLEAN,
     CONSTRAINT pk_report PRIMARY KEY (id)
 );
 

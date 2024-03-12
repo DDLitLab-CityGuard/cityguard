@@ -30,6 +30,7 @@ public class ReportRepositoryTest {
 		Category category1 = new Category();
 		category1.setName("Test Category");
 		category1.setAllowDiscrete(true);
+		category1.setAggregationRadiusMeters(5L);
 
 		Report report1 = new Report();
 		report1.setCategory(category1);

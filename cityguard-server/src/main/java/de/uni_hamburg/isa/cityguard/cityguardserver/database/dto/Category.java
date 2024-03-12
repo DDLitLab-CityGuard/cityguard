@@ -23,6 +23,8 @@ public class Category {
 	@Column(nullable = false)
 	private Long aggregationRadiusMeters;
 	private Long minimumScore;
+	private Long spamDetectionFrequencyInMinutes;
 	private Long heatmapSpreadRadius;
+	private Long spamAlertThreshold;
 	//TODO HALFLIFE FACTOR
 }

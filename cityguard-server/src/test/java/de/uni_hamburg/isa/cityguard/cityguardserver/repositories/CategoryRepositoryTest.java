@@ -23,10 +23,12 @@ public class CategoryRepositoryTest {
 		Category category1 = new Category();
 		category1.setName("Test Category");
 		category1.setAllowDiscrete(true);
+		category1.setAggregationRadiusMeters(5L);
 
 		Category category2 = new Category();
 		category2.setName("Test Category 2");
 		category2.setAllowDiscrete(false);
+		category2.setAggregationRadiusMeters(5L);
 
 		// Act
 		Category savedCategory1 = categoryRepository.save(category1);

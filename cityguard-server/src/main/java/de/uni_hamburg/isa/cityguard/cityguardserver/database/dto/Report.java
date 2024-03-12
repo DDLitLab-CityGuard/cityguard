@@ -28,6 +28,7 @@ public class Report {
 	private LocalDateTime dateTime;
 	@ManyToOne
 	private CgUser user;
+	private boolean spam;
 
 
 
