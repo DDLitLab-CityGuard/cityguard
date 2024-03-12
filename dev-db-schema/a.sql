@@ -8,5 +8,6 @@ CREATE TABLE category
     aggregation_radius_meters BIGINT,
     minimum_score DOUBLE PRECISION,
     spam_detection_frequency_in_minutes BIGINT,
+    heatmap_spread_radius BIGINT,
     CONSTRAINT pk_category PRIMARY KEY (id)
 );

@@ -5,7 +5,9 @@ import com.uber.h3core.util.LatLng;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.HeatmapCell;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.LatLon;
 import de.uni_hamburg.isa.cityguard.cityguardserver.api.dto.MarkerVisualisation;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.CategoryRepository;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.ReportRepository;
+import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Category;
 import de.uni_hamburg.isa.cityguard.cityguardserver.database.dto.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ public class ClusterAnalysisService {
 
 	private final ReportRepository reportRepository;
 	private final SpatialIndexingService spatialIndexingService;
+	private final CategoryRepository categoryRepository;
 
 	public List<HeatmapCell> generateHeatmapVisualization(
 			Float latitudeUpper,
@@ -27,27 +30,33 @@ public class ClusterAnalysisService {
 			Long heatmapCategory
 	){
 		List<Report> heatmapReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, List.of(heatmapCategory));
-		int resolution = spatialIndexingService.resolutionFromZoom(new LatLng(latitudeUpper, longitudeLeft), new LatLng(latitudeLower, longitudeRight));
+		int resolution = 10;
+		long bleedDistance = 0;
+		Optional<Category> category = categoryRepository.findById(heatmapCategory);
+		if(category.isPresent()){
+			bleedDistance = category.get().getHeatmapSpreadRadius();
+		}
 
-		List<Cluster> clusters = weightedFixedRadiusNearestNeighbour(heatmapReports);
+		Map<String, List<Report>> addressMap = spatialIndexingService.groupByCell(heatmapReports, resolution);
+		List<String> addressList = addressMap.keySet().stream().toList();
+
+
 		Map<String, Float> scoreMap = new HashMap<>();
-		for (Cluster cluster : clusters){
-			if (cluster.score() >= cluster.category().getMinimumScore()){
-				Map<String, List<Report>> addressMap = spatialIndexingService.groupByCell(cluster.reportList(), resolution);
-				for (String address : addressMap.keySet()){
-					scoreMap.put(address, 0.4f);
+		for (String address : addressList){
+			List<List<String>> addressRings = spatialIndexingService.addressBleed(address, (int) bleedDistance);
+			for (int i = 0; i < addressRings.size(); i++) {
+				List<String> ring = addressRings.get(i);
+				for (String cellAddress : ring) {
+					float score = scoreMap.getOrDefault(cellAddress, 0f);
+					scoreMap.put(cellAddress, Math.max(score, ((-0.6f/(bleedDistance + 1f))*i)+0.6f));
 				}
-				scoreMap.put(spatialIndexingService.clusterAddress(cluster, resolution), 0.6f);
 			}
 		}
 
-		List<String> addressList = spatialIndexingService.addressListFromBounds(latitudeUpper, latitudeLower, longitudeLeft, longitudeRight, resolution);
-
 		List<HeatmapCell> heatmap = new ArrayList<>();
-		for (String address : addressList){
-			float score = scoreMap.getOrDefault(address, 0.1f);
+		for (String address : scoreMap.keySet()){
 			HeatmapCell cell = new HeatmapCell();
-			cell.setValue(Math.min(score, 0.6f));
+			cell.setValue(scoreMap.get(address));
 			cell.setPolygon(spatialIndexingService.polygonFromAddress(address));
 			heatmap.add(cell);
 		}
@@ -66,6 +75,7 @@ public class ClusterAnalysisService {
 		List<MarkerVisualisation> markerVisualisations = new ArrayList<>();
 		for (Cluster cluster : clusters){
 			MarkerVisualisation markerVisualisation = new MarkerVisualisation();
+			markerVisualisation.setId(cluster.reportList().get(0).getId());
 			markerVisualisation.setLatitude(cluster.center().getLatitude());
 			markerVisualisation.setLongitude(cluster.center().getLongitude());
 			markerVisualisation.setCategoryColor(cluster.category().getColor());
@@ -104,9 +114,9 @@ public class ClusterAnalysisService {
 		float score = 0.5f;
 		Map<Long, Integer> userDamping = new HashMap<>();
 		for (Report report : reports){
-			//int damping = userDamping.getOrDefault(report.getUser().getId(), 0);
+			int damping = userDamping.getOrDefault(report.getUser().getId(), 0);
 			double distance = spatialIndexingService.distance(new LatLng(report.getLatitude(), report.getLongitude()), new LatLng(clusterCenter.getLatitude(), clusterCenter.getLongitude()), LengthUnit.m);
-			score += (float) (1f * Math.pow(0.98f, distance));
+			score += 1f; // Math.pow(0.98f, distance)
 			userDamping.put(report.getUser().getId(), userDamping.getOrDefault(report.getUser().getId(), 0) + 1);
 		}
 		return score;

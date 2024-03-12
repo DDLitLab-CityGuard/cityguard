@@ -24,4 +24,6 @@ public class Category {
 	private Long aggregationRadiusMeters;
 	private Long minimumScore;
 	private Long spamDetectionFrequencyInMinutes;
+	private Long heatmapSpreadRadius;
+	//TODO HALFLIFE FACTOR
 }
