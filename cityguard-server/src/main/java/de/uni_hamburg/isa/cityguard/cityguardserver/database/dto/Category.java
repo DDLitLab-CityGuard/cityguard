@@ -25,5 +25,6 @@ public class Category {
 	private Long minimumScore;
 	private Long spamDetectionFrequencyInMinutes;
 	private Long heatmapSpreadRadius;
+	private Long spamAlertThreshold;
 	//TODO HALFLIFE FACTOR
 }

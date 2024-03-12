@@ -9,5 +9,6 @@ CREATE TABLE category
     minimum_score DOUBLE PRECISION,
     spam_detection_frequency_in_minutes BIGINT,
     heatmap_spread_radius BIGINT,
+    spam_alert_threshold BIGINT,
     CONSTRAINT pk_category PRIMARY KEY (id)
 );

@@ -47,9 +47,6 @@ public interface ReportRepository extends JpaRepository<Report,Long> {
 			@Param("categories") List<Long> categories
 	);
 
-
-
-
 	@Query("SELECT r FROM Report r "
 			+ "WHERE ( (:user = r.user) AND (:cat=r.category)) "
 			+"AND(r.spam = false)"
@@ -60,6 +57,8 @@ public interface ReportRepository extends JpaRepository<Report,Long> {
 			@Param("cat") Category cat,
 			@Param("datetimealtered")LocalDateTime dateTimeAltered,
 			@Param("datetimeentered") LocalDateTime dateTime
-			);
+	);
+
+	List<Report> findByUser(CgUser user);
 
 }

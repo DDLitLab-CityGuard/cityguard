@@ -111,8 +111,10 @@ public class CityGuardRestController {
 		}
 		report.setDateTime(dateTime);
 		report.setSpam(false);
-		spamDetectionService.handleSimilarReportsInTheRadius(report);
 		reportRepository.save(report);
+
+		spamDetectionService.handleSimilarReportsInTheRadius(report);
+
 
 		return ResponseEntity.ok("{\"status\": \"success\"}");
 	}
