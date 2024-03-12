@@ -75,6 +75,7 @@ public class ClusterAnalysisService {
 		List<MarkerVisualisation> markerVisualisations = new ArrayList<>();
 		for (Cluster cluster : clusters){
 			MarkerVisualisation markerVisualisation = new MarkerVisualisation();
+			markerVisualisation.setId(cluster.reportList().get(0).getId());
 			markerVisualisation.setLatitude(cluster.center().getLatitude());
 			markerVisualisation.setLongitude(cluster.center().getLongitude());
 			markerVisualisation.setCategoryColor(cluster.category().getColor());
