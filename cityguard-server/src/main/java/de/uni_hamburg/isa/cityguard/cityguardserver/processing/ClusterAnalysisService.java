@@ -73,16 +73,15 @@ public class ClusterAnalysisService {
 		List<Report> selectedReports = reportRepository.findBetweenBounds(longitudeLeft, longitudeRight, latitudeLower, latitudeUpper, categories);
 		List<Cluster> clusters = weightedFixedRadiusNearestNeighbour(selectedReports);
 		List<MarkerVisualisation> markerVisualisations = new ArrayList<>();
-		for (Cluster cluster : clusters){
+		for (Report report : selectedReports){
 			MarkerVisualisation markerVisualisation = new MarkerVisualisation();
-			markerVisualisation.setId(cluster.reportList().get(0).getId());
-			markerVisualisation.setLatitude(cluster.center().getLatitude());
-			markerVisualisation.setLongitude(cluster.center().getLongitude());
-			markerVisualisation.setCategoryColor(cluster.category().getColor());
-			markerVisualisation.setCategoryIcon(cluster.category().getIcon());
-			if(cluster.score() >= cluster.category().getMinimumScore()){
-				markerVisualisations.add(markerVisualisation);
-			}
+			markerVisualisation.setId(report.getId());
+			markerVisualisation.setLatitude(report.getLatitude());
+			markerVisualisation.setLongitude(report.getLongitude());
+			markerVisualisation.setCategoryColor(report.getCategory().getColor());
+			markerVisualisation.setCategoryIcon(report.getCategory().getIcon());
+			markerVisualisations.add(markerVisualisation);
+
 		}
 		return markerVisualisations;
 	}
