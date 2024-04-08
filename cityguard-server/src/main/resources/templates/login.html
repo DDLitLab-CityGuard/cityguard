@@ -30,11 +30,11 @@
             position: fixed;
             right: 0;
             bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
             z-index: -1;
+            filter: brightness(50%);
         }
     </style>
 </head>
@@ -44,7 +44,7 @@
 <!-- Section: Design Block -->
 <section class="background-radial-gradient overflow-hidden">
     <video id="video-background" autoplay muted loop>
-        <source src="videos/video.mp4" type="video/mp4">
+        <source src="https://www.pexels.com/de-de/download/video/3048225/" type="video/mp4">
         Your browser does not support the video tag.
     </video>
     <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
